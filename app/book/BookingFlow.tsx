@@ -7,6 +7,7 @@ import { useT, useLocalized, useLang } from '@/lib/i18n';
 import { SERVICES, serviceById } from '@/lib/services';
 import { SPECIALISTS, ANY_SPECIALIST } from '@/lib/specialists';
 import { BUSINESS, ADDRESS_LINE, isClosedOn } from '@/lib/business';
+import { StripePaymentForm } from '@/components/StripePaymentForm';
 import {
   Appointment,
   availableSlots,
@@ -37,9 +38,14 @@ export default function BookingFlow() {
   const [form, setForm] = useState({ name: '', phone: '', email: '', notes: '' });
   const [errors, setErrors] = useState<Record<string, string>>({});
   const [confirmed, setConfirmed] = useState<Appointment | null>(null);
+  const [paymentError, setPaymentError] = useState('');
+  const [showPaymentForm, setShowPaymentForm] = useState(false);
 
   const [appointments, setAppointments] = useState<Appointment[]>([]);
   const [blocked, setBlocked] = useState<string[]>([]);
+
+  const paymentsEnabled = process.env.NEXT_PUBLIC_PAYMENTS_ENABLED === 'true';
+  const depositCents = parseInt(process.env.NEXT_PUBLIC_DEPOSIT_CENTS || '0', 10);
 
   useEffect(() => {
     setAppointments(loadAppointments());
@@ -102,8 +108,8 @@ export default function BookingFlow() {
     return Object.keys(e).length === 0;
   }
 
-  function submit() {
-    if (!validate() || !service) return;
+  function createAppointment() {
+    if (!service) return;
     const appt: Appointment = {
       id: crypto.randomUUID(),
       serviceId,
@@ -121,6 +127,23 @@ export default function BookingFlow() {
     saveAppointment(appt);
     setAppointments((a) => [...a, appt]);
     setConfirmed(appt);
+  }
+
+  function handlePaymentSuccess() {
+    createAppointment();
+  }
+
+  function submit() {
+    if (!validate() || !service) return;
+
+    // If payments are enabled and there's an amount due, show payment form
+    if (paymentsEnabled && depositCents > 0) {
+      setShowPaymentForm(true);
+      return;
+    }
+
+    // Otherwise create appointment immediately
+    createAppointment();
   }
 
   // Each step change reveals new content above the fold; without this the user
@@ -330,53 +353,94 @@ export default function BookingFlow() {
           >
             <Summary serviceName={service ? L(service.name) : ''} specialistId={specialistId} date={date} time={time} />
 
-            <Field
-              id="name"
-              label={t('booking.name')}
-              value={form.name}
-              onChange={(v) => setForm({ ...form, name: v })}
-              error={errors.name}
-              autoComplete="name"
-            />
-            <Field
-              id="phone"
-              type="tel"
-              label={t('booking.phone')}
-              value={form.phone}
-              onChange={(v) => setForm({ ...form, phone: v })}
-              error={errors.phone}
-              autoComplete="tel"
-            />
-            <Field
-              id="email"
-              type="email"
-              label={t('booking.emailLabel')}
-              value={form.email}
-              onChange={(v) => setForm({ ...form, email: v })}
-              error={errors.email}
-              autoComplete="email"
-            />
+            {!showPaymentForm ? (
+              <>
+                <Field
+                  id="name"
+                  label={t('booking.name')}
+                  value={form.name}
+                  onChange={(v) => setForm({ ...form, name: v })}
+                  error={errors.name}
+                  autoComplete="name"
+                />
+                <Field
+                  id="phone"
+                  type="tel"
+                  label={t('booking.phone')}
+                  value={form.phone}
+                  onChange={(v) => setForm({ ...form, phone: v })}
+                  error={errors.phone}
+                  autoComplete="tel"
+                />
+                <Field
+                  id="email"
+                  type="email"
+                  label={t('booking.emailLabel')}
+                  value={form.email}
+                  onChange={(v) => setForm({ ...form, email: v })}
+                  error={errors.email}
+                  autoComplete="email"
+                />
 
-            <div>
-              <label htmlFor="notes" className="field-label">
-                {t('booking.notes')}
-              </label>
-              <textarea
-                id="notes"
-                rows={4}
-                value={form.notes}
-                onChange={(e) => setForm({ ...form, notes: e.target.value })}
-                aria-describedby="notes-hint"
-                className="field-input"
-              />
-              <p id="notes-hint" className="mt-2 text-xs text-ink-muted">
-                {t('booking.notesHint')}
-              </p>
-            </div>
+                <div>
+                  <label htmlFor="notes" className="field-label">
+                    {t('booking.notes')}
+                  </label>
+                  <textarea
+                    id="notes"
+                    rows={4}
+                    value={form.notes}
+                    onChange={(e) => setForm({ ...form, notes: e.target.value })}
+                    aria-describedby="notes-hint"
+                    className="field-input"
+                  />
+                  <p id="notes-hint" className="mt-2 text-xs text-ink-muted">
+                    {t('booking.notesHint')}
+                  </p>
+                </div>
 
-            <button type="submit" className="btn-primary w-full">
-              {t('booking.confirm')}
-            </button>
+                <button type="submit" className="btn-primary w-full">
+                  {t('booking.confirm')}
+                </button>
+              </>
+            ) : (
+              <>
+                <div className="border border-ink/10 bg-cream-deep p-4">
+                  <p className="text-sm font-medium text-ink-muted">
+                    Payment for {service ? L(service.name) : 'your appointment'}
+                  </p>
+                  <p className="mt-2 text-lg font-semibold text-ink">
+                    ${(depositCents / 100).toFixed(2)}
+                  </p>
+                </div>
+
+                {paymentError && (
+                  <p className="rounded border border-rose-text/30 bg-rose/10 p-3 text-sm font-medium text-rose-text">
+                    {paymentError}
+                  </p>
+                )}
+
+                <StripePaymentForm
+                  amount={depositCents}
+                  description={`${service ? L(service.name) : 'Appointment'} - ${form.name}`}
+                  email={form.email}
+                  name={form.name}
+                  onSuccess={handlePaymentSuccess}
+                  onError={(error) => setPaymentError(error)}
+                />
+
+                <button
+                  type="button"
+                  onClick={() => {
+                    setShowPaymentForm(false);
+                    setPaymentError('');
+                  }}
+                  className="btn-outline w-full"
+                >
+                  {t('booking.back')}
+                </button>
+              </>
+            )}
           </form>
         )}
       </div>

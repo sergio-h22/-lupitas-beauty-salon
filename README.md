@@ -21,11 +21,14 @@ Read this section before showing the site to anyone.
 - Local SEO: metadata, `HairSalon` structured data, sitemap, robots
 - Google Maps embed, click-to-call, directions
 - Owner dashboard: view/approve/cancel appointments, block time off
+- **Stripe payment processing** — collect deposits or full payment at booking
+  (optional, configurable via environment variables)
 
 **Not real yet — needs an account and keys**
 
 | Feature | What it needs |
 |---|---|
+| Payment processing | Stripe account (free to set up, pay per transaction) |
 | Appointments surviving a browser refresh on another device | A database (Supabase, Neon, Planetscale) |
 | Confirmation email | Resend or SendGrid |
 | Confirmation text message | Twilio |
@@ -55,6 +58,29 @@ npm start        # serve the production build
 ```
 
 Node 20 or newer.
+
+---
+
+## Stripe Payment Integration (Optional)
+
+To enable payment processing:
+
+1. Create a free [Stripe account](https://stripe.com)
+2. Copy `.env.local.example` to `.env.local`
+3. Add your Stripe API keys from the [Stripe Dashboard](https://dashboard.stripe.com/apikeys):
+   - `NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY` (public key, safe to commit)
+   - `STRIPE_SECRET_KEY` (secret key, never commit)
+4. Set payment configuration:
+   - `NEXT_PUBLIC_PAYMENTS_ENABLED=true` to enable payments
+   - `NEXT_PUBLIC_DEPOSIT_CENTS=5000` to collect a $50 deposit (or set to 0 for full payment)
+
+Payments are **optional** — leave `NEXT_PUBLIC_PAYMENTS_ENABLED=false` to book without payment.
+
+When payments are enabled:
+- Customers fill in their details, then see a secure Stripe payment form
+- Deposits are collected at booking time
+- Payment data is encrypted and handled by Stripe (never stored locally)
+- Failing to process a test payment? Stripe test mode accepts `4242 4242 4242 4242` with any future expiry and any CVC
 
 ---
 
