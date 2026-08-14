@@ -1,35 +1,79 @@
+'use client';
+
 import { ReactNode } from 'react';
 import Reveal from './Reveal';
 
+/**
+ * The editorial section header.
+ *
+ * The previous version stamped an identical eyebrow + gold rule + centred
+ * heading onto seven consecutive sections, which is the strongest "template"
+ * tell a page can have. This one is built to vary: a serial numeral turns the
+ * page into a sequence, and `align` lets sections alternate between an
+ * asymmetric left column and a centred statement.
+ */
 export default function SectionHeading({
+  index,
   eyebrow,
   title,
   subtitle,
-  align = 'center',
+  align = 'left',
   tone = 'dark',
+  size = 'md',
 }: {
+  /** Serial numeral, e.g. "01". Omit on sections that stand outside the sequence. */
+  index?: string;
   eyebrow: string;
   title: ReactNode;
   subtitle?: string;
   align?: 'center' | 'left';
   tone?: 'dark' | 'light';
+  size?: 'md' | 'lg';
 }) {
+  const light = tone === 'light';
+  const centered = align === 'center';
+
   return (
-    <Reveal className={align === 'center' ? 'mx-auto max-w-2xl text-center' : 'max-w-2xl'}>
-      <p className={`eyebrow ${tone === 'light' ? '!text-gold' : ''}`}>{eyebrow}</p>
-      <div className={`rule-gold mt-4 ${align === 'center' ? 'mx-auto' : ''}`} />
-      <h2
-        className={`mt-6 text-[clamp(1.9rem,4.5vw,3rem)] ${
-          tone === 'light' ? '!text-cream' : ''
+    <div className={centered ? 'mx-auto max-w-2xl text-center' : 'max-w-3xl'}>
+      <Reveal
+        className={`flex items-center gap-4 ${centered ? 'justify-center' : ''}`}
+        variant="lift"
+      >
+        {index && (
+          <span className={`serial ${light ? '!text-cream/40' : ''}`} aria-hidden="true">
+            {index}
+          </span>
+        )}
+        {index && (
+          <span
+            aria-hidden="true"
+            className={`h-px w-8 ${light ? 'bg-cream/25' : 'bg-ink/20'}`}
+          />
+        )}
+        <span className={light ? 'eyebrow-light' : 'eyebrow'}>{eyebrow}</span>
+      </Reveal>
+
+      <Reveal
+        as="h2"
+        variant="mask"
+        delay={0.08}
+        className={`mt-7 ${size === 'lg' ? 'text-display-lg' : 'text-display-md'} ${
+          light ? '!text-cream' : ''
         }`}
       >
-        {title}
-      </h2>
+        <span>{title}</span>
+      </Reveal>
+
       {subtitle && (
-        <p className={`mt-5 text-base leading-relaxed ${tone === 'light' ? 'text-cream/70' : 'text-ink-muted'}`}>
+        <Reveal
+          delay={0.18}
+          className={`mt-6 max-w-prose text-[0.98rem] leading-relaxed ${
+            centered ? 'mx-auto' : ''
+          } ${light ? 'text-cream/60' : 'text-ink-muted'}`}
+        >
           {subtitle}
-        </p>
+        </Reveal>
       )}
-    </Reveal>
+    </div>
   );
 }

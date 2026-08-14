@@ -117,6 +117,45 @@ Protect the owner dashboard with a login:
 
 ---
 
+## The design system — "Editorial Atelier"
+
+Read this before adding a section, or the page drifts back toward a template.
+
+**Sections are a numbered sequence, not a stack.** `SectionHeading` takes an
+`index` (`"01"`, `"02"`…) that renders as a serial numeral beside the eyebrow.
+Continue the numbering when you add a section; the numerals are what make the
+page read as composed rather than assembled.
+
+**Vary the composition.** The homepage alternates deliberately: asymmetric
+12-column split → full-width index → two-up → dark band. Seven consecutive
+centred-heading-over-a-grid sections is the single strongest "AI template"
+signal a page can have, however good each section is on its own. `align`
+defaults to `left` for that reason.
+
+**Gold is punctuation.** It appears on hairlines, serial numerals, the stops in
+the hero statement, and on dark ground. It is never a panel border, never a
+background, and never body text on cream (it fails contrast — see
+Accessibility). If gold shows up three times in one section, remove two.
+
+**Services are an index, not cards.** `ServiceIndex` sets the menu the way a
+tasting menu is set — numbered rows, hairline rules, the whole row as the hit
+target. `ServiceCard` was deleted; do not reintroduce a bordered card grid.
+
+**Type scale is deliberately gapped.** Use the `display-xl / lg / md / sm`
+tokens rather than ad-hoc `text-[clamp(...)]`. Mid-sized headings everywhere is
+what makes a page look filled in rather than art-directed. Playfair carries
+every heading at weight 400 — do not bold it.
+
+**Motion has one signature.** Content lifts (`<Reveal>`), headings unmask
+(`variant="mask"`), rules draw (`variant="rule"`). Three variants, one easing
+curve (`ease-luxe`). Do not add a fourth.
+
+**Buttons have three weights.** `.btn-primary` (fill), `.btn-outline`
+(hairline), `.btn-quiet` (bare text with a rule that draws on hover), plus
+`-ondark` variants. Hierarchy comes from weight, not from new shapes.
+
+---
+
 ## The files you will actually edit
 
 ### `lib/business.ts` — name, phone, address, hours
@@ -271,35 +310,55 @@ part of the salon entity instead.
 
 Checked, not assumed:
 
-- Brand palette measured against WCAG. Champagne gold `#D4AF37` is **1.95:1 on
-  cream** — it fails badly as text on light backgrounds, so it is used only for
-  rules, borders and gold-on-black. Text needing gold uses `#7A5F18` (5.61:1).
-  The same applies to soft rose: `#D8A7A7` decoratively, `#8C5252` (5.66:1) for
-  text. **Do not set body text in `#D4AF37` on cream.**
-- Body text 6.15:1, headings 17.5:1.
+- Brand palette measured against WCAG. Brass `#C9A227` is **2.26:1 on cream** —
+  it fails as text on light grounds, so it is used only for rules, borders,
+  numerals and gold-on-black. Text needing gold uses `#7A5F18` (5.61:1). The
+  same applies to soft rose: `#D8A7A7` decoratively, `#8C5252` (5.66:1) for
+  text. **Do not set body text in `#C9A227` on cream.**
+- The lightest text tone, `ink.faint` `#6F6859`, measures 5.17:1 on cream and
+  4.66:1 on cream-deep — it carries small meta text (durations, prices,
+  captions) so it has to clear AA on both grounds. An earlier, prettier
+  `#948C81` measured 3.10:1 and was rejected.
+- Body text 6.17:1, headings 18.2:1.
 - Every interactive target is at least 44×44px.
 - Visible focus rings everywhere; none are removed.
-- `prefers-reduced-motion` disables all scroll animations and smooth scrolling.
+- `prefers-reduced-motion` forces every reveal to its resting state rather than
+  merely shortening it — reveals start at `opacity: 0`, so "faster" would still
+  mean invisible.
+- A `<noscript>` block restores that same resting state, so the page is fully
+  readable with JavaScript disabled.
+- The mobile drawer is a labelled `role="dialog"`, locks body scroll, closes on
+  Escape, and takes its links out of the tab order while hidden.
 - Form errors sit beside their field, are announced via `aria-describedby`, and
   mark the input `aria-invalid`.
 - Language switching updates `<html lang>` so screen readers change voice.
 
-Verified end-to-end in Chromium: all pages render, the booking flow completes,
-validation catches every empty field, the booking appears in the dashboard,
-and the console is clean — no JS errors, no failed requests.
+Verified in Chromium at 390 / 834 / 1440 / 1920 px: no horizontal overflow on
+any page, no reveal left stuck at zero opacity, drawer and booking flow both
+complete, and the console is clean — no JS errors, no failed requests.
 
 ## Performance
 
 - Every page prerenders as static HTML.
-- Fonts self-hosted through `next/font` — no render-blocking Google Fonts.
+- **Five font weights, down from nine.** Playfair Display 400/500 and Jost
+  300/400/500, self-hosted through `next/font`.
+- **No animation library.** Scroll reveals are CSS transitions toggled by a
+  single shared `IntersectionObserver` (`components/Reveal.tsx`), replacing
+  framer-motion — roughly 50 kB gzipped removed from every page for motion
+  that CSS does natively.
+- **Stripe.js is never fetched unless payments are configured.** The import
+  uses `@stripe/stripe-js/pure`; the plain entrypoint injects the js.stripe.com
+  script as a module side-effect, so importing it at all would cost every
+  booking-page visitor a third-party request.
 - The hero video is gated behind `HERO_VIDEO` in `lib/business.ts`: while those
   paths are empty no video element mounts and nothing is requested. When you
   add footage, it loads only after the hero scrolls into view and is skipped
   entirely on Save-Data or 2G/3G connections.
 - Animations move `transform` and `opacity` only, never `width`/`height`, so
   they cannot cause layout shift.
-- Image placeholders reserve their aspect ratio, so dropping in real photos
-  will not move the page.
+- Photographs go through `next/image` with explicit `sizes`, and every
+  placeholder reserves its aspect ratio, so dropping in real photos will not
+  move the page.
 
 Compress hero footage hard — under 3 MB, ideally WebM plus MP4 — and export
 photographs as WebP. That is where the 3-second budget will be won or lost.

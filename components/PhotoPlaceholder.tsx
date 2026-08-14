@@ -1,49 +1,72 @@
 'use client';
 
-import { useT } from '@/lib/i18n';
+import Image from 'next/image';
 
 /**
- * Stands in until real photography exists. Reserves its aspect ratio so
+ * Stands in until real photography exists, and reserves its aspect ratio so
  * dropping a real image in later cannot shift the layout.
+ *
+ * The previous version used a dashed border and the words "coming soon",
+ * which reads as an unfinished site. This one is a composed plate — hairline
+ * frame, ghosted monogram, caption set in the same register as the rest of
+ * the page — so an unphotographed section still looks deliberate.
  */
 export default function PhotoPlaceholder({
   label,
   ratio = 'aspect-[4/5]',
   src,
   className = '',
+  sizes = '(min-width: 1024px) 33vw, (min-width: 640px) 50vw, 100vw',
+  priority = false,
 }: {
   label: string;
   ratio?: string;
   src?: string;
   className?: string;
+  sizes?: string;
+  priority?: boolean;
 }) {
-  const t = useT();
-
   if (src) {
-    // eslint-disable-next-line @next/next/no-img-element
     return (
-      <img
-        src={src}
-        alt={label}
-        className={`${ratio} w-full object-cover ${className}`}
-        loading="lazy"
-        decoding="async"
-      />
+      <div className={`frame group ${ratio} ${className}`}>
+        <Image
+          src={src}
+          alt={label}
+          fill
+          sizes={sizes}
+          priority={priority}
+          className="img-editorial"
+        />
+      </div>
     );
   }
 
   return (
-    <div className={`placeholder-tile ${ratio} w-full gap-3 ${className}`}>
-      <svg viewBox="0 0 24 24" aria-hidden="true" className="h-8 w-8 text-gold" fill="none" stroke="currentColor" strokeWidth="1.3">
-        <path
-          strokeLinecap="round"
-          strokeLinejoin="round"
-          d="m2.25 15.75 5.159-5.159a2.25 2.25 0 0 1 3.182 0l5.159 5.159m-1.5-1.5 1.409-1.409a2.25 2.25 0 0 1 3.182 0l2.909 2.909M18 9.75h.008v.008H18V9.75Zm.375 0a.375.375 0 1 1-.75 0 .375.375 0 0 1 .75 0Z"
-        />
-        <path strokeLinecap="round" strokeLinejoin="round" d="M2.25 6.75A2.25 2.25 0 0 1 4.5 4.5h15a2.25 2.25 0 0 1 2.25 2.25v10.5A2.25 2.25 0 0 1 19.5 19.5h-15a2.25 2.25 0 0 1-2.25-2.25V6.75Z" />
-      </svg>
-      <span className="px-5 text-xs font-medium">{label}</span>
-      <span className="text-[0.6rem] uppercase tracking-[0.16em]">{t('gallery.placeholder')}</span>
+    <div className={`placeholder-tile ${ratio} w-full ${className}`}>
+      <span aria-hidden="true" className="absolute inset-3 border border-ink/10" />
+
+      <Monogram />
+
+      <span className="absolute inset-x-0 bottom-6 px-6 font-body text-label font-medium uppercase text-ink-faint">
+        {label}
+      </span>
     </div>
+  );
+}
+
+function Monogram() {
+  return (
+    <svg
+      viewBox="0 0 40 40"
+      aria-hidden="true"
+      className="h-16 w-16 text-ink/10"
+      fill="none"
+      stroke="currentColor"
+    >
+      <circle cx="20" cy="20" r="18" strokeWidth="0.6" />
+      <path d="M13.5 11.5 L26 25.5 M26.5 11.5 L14 25.5" strokeWidth="0.9" strokeLinecap="round" />
+      <circle cx="14.5" cy="28.5" r="2.6" strokeWidth="0.9" />
+      <circle cx="25.5" cy="28.5" r="2.6" strokeWidth="0.9" />
+    </svg>
   );
 }

@@ -48,15 +48,17 @@ export default function GalleryClient() {
 
       <section className="py-section">
         <div className="shell">
-          <div role="group" aria-label={t('gallery.eyebrow')} className="flex flex-wrap justify-center gap-2">
+          <div role="group" aria-label={t('gallery.eyebrow')} className="flex flex-wrap gap-2">
             {FILTERS.map((f) => (
               <button
                 key={f.id}
                 type="button"
                 onClick={() => setFilter(f.id)}
                 aria-pressed={filter === f.id}
-                className={`min-h-[44px] cursor-pointer border px-5 text-[0.72rem] font-semibold uppercase tracking-[0.14em] transition-colors duration-250 ${
-                  filter === f.id ? 'border-ink bg-ink text-cream' : 'border-ink/20 text-ink hover:border-ink'
+                className={`min-h-[44px] cursor-pointer border px-5 font-body text-label font-medium uppercase transition-colors duration-400 ease-luxe ${
+                  filter === f.id
+                    ? 'border-ink bg-ink text-cream'
+                    : 'border-ink/15 text-ink-mid hover:border-ink hover:text-ink'
                 }`}
               >
                 {L(f.label)}
@@ -64,7 +66,11 @@ export default function GalleryClient() {
             ))}
           </div>
 
-          <div className="mt-14 grid gap-10 md:grid-cols-2 lg:grid-cols-3">
+          <p aria-live="polite" className="sr-only">
+            {shown.length} results
+          </p>
+
+          <div className="mt-14 grid gap-x-8 gap-y-12 md:mt-20 md:grid-cols-2 lg:grid-cols-3">
             {shown.map((item, i) => (
               <Reveal key={item.id} delay={Math.min(i, 5) * 0.06}>
                 <BeforeAfter
@@ -81,14 +87,20 @@ export default function GalleryClient() {
       <section className="bg-cream-deep py-section">
         <div className="shell">
           <SectionHeading
+            index="02"
             eyebrow="Video"
             title={t('gallery.title')}
             subtitle={t('gallery.placeholder')}
+            align="left"
           />
-          <div className="mt-14 grid gap-6 md:grid-cols-3">
+          <div className="mt-14 grid gap-6 md:mt-20 md:grid-cols-3">
             {VIDEO_SLOTS.map((v, i) => (
               <Reveal key={i} delay={i * 0.08}>
-                <PhotoPlaceholder label={L(v)} ratio="aspect-[9/16]" />
+                <PhotoPlaceholder
+                  label={L(v)}
+                  ratio="aspect-[9/16]"
+                  sizes="(min-width: 768px) 30vw, 90vw"
+                />
               </Reveal>
             ))}
           </div>

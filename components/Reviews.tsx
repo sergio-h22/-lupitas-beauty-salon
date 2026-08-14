@@ -7,28 +7,40 @@ import Reveal from './Reveal';
 /**
  * Placeholder testimonials. These carry no schema.org Review markup on
  * purpose — marking up invented reviews as real ones is a Google penalty
- * risk. Add AggregateRating only once these are genuine.
+ * risk. Add `AggregateRating` only once these are genuine.
  */
 const SLOTS = [1, 2, 3];
 
-export default function Reviews() {
+export default function Reviews({ index }: { index?: string }) {
   const t = useT();
 
   return (
     <section className="bg-ink py-section">
       <div className="shell">
-        <SectionHeading eyebrow={t('reviews.eyebrow')} title={t('reviews.title')} tone="light" />
+        <SectionHeading
+          index={index}
+          eyebrow={t('reviews.eyebrow')}
+          title={t('reviews.title')}
+          tone="light"
+          align="left"
+        />
 
-        <ul className="mt-16 grid gap-8 md:grid-cols-3">
+        {/* Hairline-separated columns rather than bordered boxes: the quote
+            itself carries the weight, which is how an editorial page sets a
+            testimonial. */}
+        <ul className="mt-14 grid gap-x-10 gap-y-12 md:mt-20 md:grid-cols-3">
           {SLOTS.map((n, i) => (
-            <Reveal as="li" key={n} delay={i * 0.09}>
-              <blockquote className="flex h-full flex-col border border-cream/15 p-8">
+            <Reveal as="li" key={n} delay={i * 0.09} className="border-t border-cream/15 pt-8">
+              <blockquote className="flex h-full flex-col">
                 <Stars />
-                <p className="mt-5 flex-1 font-display text-[1.05rem] italic leading-relaxed text-cream/80">
+                <p className="mt-6 flex-1 font-display text-[1.2rem] leading-relaxed text-cream/85">
                   &ldquo;{t('reviews.placeholder')}&rdquo;
                 </p>
-                <footer className="mt-6 text-[0.7rem] font-semibold uppercase tracking-[0.18em] text-gold">
-                  Client Name
+                <footer className="mt-7 flex items-center gap-3">
+                  <span aria-hidden="true" className="h-px w-6 bg-gold" />
+                  <span className="font-body text-label font-medium uppercase text-gold-soft">
+                    Client Name
+                  </span>
                 </footer>
               </blockquote>
             </Reveal>
@@ -41,9 +53,9 @@ export default function Reviews() {
 
 function Stars() {
   return (
-    <div className="flex gap-1" aria-hidden="true">
+    <div className="flex gap-1.5" aria-hidden="true">
       {Array.from({ length: 5 }).map((_, i) => (
-        <svg key={i} viewBox="0 0 24 24" className="h-4 w-4 text-gold" fill="currentColor">
+        <svg key={i} viewBox="0 0 24 24" className="h-3 w-3 text-gold" fill="currentColor">
           <path d="M12 2.5l2.9 5.9 6.5.95-4.7 4.58 1.11 6.47L12 17.4l-5.81 3.05 1.11-6.47-4.7-4.58 6.5-.95L12 2.5z" />
         </svg>
       ))}

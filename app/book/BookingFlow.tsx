@@ -8,6 +8,7 @@ import { SERVICES, serviceById } from '@/lib/services';
 import { SPECIALISTS, ANY_SPECIALIST } from '@/lib/specialists';
 import { BUSINESS, ADDRESS_LINE, isClosedOn } from '@/lib/business';
 import { StripePaymentForm } from '@/components/StripePaymentForm';
+import { paymentsAvailable } from '@/components/StripeProvider';
 import {
   Appointment,
   availableSlots,
@@ -44,7 +45,10 @@ export default function BookingFlow() {
   const [appointments, setAppointments] = useState<Appointment[]>([]);
   const [blocked, setBlocked] = useState<string[]>([]);
 
-  const paymentsEnabled = process.env.NEXT_PUBLIC_PAYMENTS_ENABLED === 'true';
+  // Sourced from the provider so the flag and the publishable key can never
+  // disagree — asking for payment with no key configured would dead-end the
+  // customer at the last step of the booking.
+  const paymentsEnabled = paymentsAvailable;
   const depositCents = parseInt(process.env.NEXT_PUBLIC_DEPOSIT_CENTS || '0', 10);
 
   useEffect(() => {
@@ -163,25 +167,24 @@ export default function BookingFlow() {
     (step === 4 && !!time);
 
   return (
-    <div className="shell max-w-3xl py-section">
-      <ol className="mb-12 flex items-center gap-2" aria-label={`${t('booking.step')} ${step} ${t('booking.of')} ${STEPS}`}>
+    <div className="shell-narrow max-w-3xl py-section">
+      {/* Progress as a run of hairlines rather than numbered bubbles — it reads
+          as a measure of how far through you are, which is the only thing the
+          control is actually for. */}
+      <ol
+        className="mb-12 flex items-center gap-1.5"
+        aria-label={`${t('booking.step')} ${step} ${t('booking.of')} ${STEPS}`}
+      >
         {Array.from({ length: STEPS }).map((_, i) => {
           const n = i + 1;
           return (
-            <li key={n} className="flex flex-1 items-center gap-2">
+            <li key={n} className="flex-1">
               <span
                 aria-current={n === step ? 'step' : undefined}
-                className={`flex h-8 w-8 flex-none items-center justify-center rounded-full border text-xs font-semibold ${
-                  n < step
-                    ? 'border-gold-text bg-gold-text text-cream'
-                    : n === step
-                      ? 'border-ink bg-ink text-cream'
-                      : 'border-ink/25 text-ink-muted'
+                className={`block h-0.5 w-full transition-colors duration-600 ease-luxe ${
+                  n < step ? 'bg-gold' : n === step ? 'bg-ink' : 'bg-ink/12'
                 }`}
-              >
-                {n < step ? '✓' : n}
-              </span>
-              {n < STEPS && <span className={`h-px flex-1 ${n < step ? 'bg-gold-text' : 'bg-ink/15'}`} />}
+              />
             </li>
           );
         })}
@@ -190,9 +193,7 @@ export default function BookingFlow() {
       <p className="eyebrow">
         {t('booking.step')} {step} {t('booking.of')} {STEPS}
       </p>
-      <h2 className="mt-3 text-[clamp(1.6rem,4vw,2.4rem)]">
-        {t(`booking.step${step}` as string)}
-      </h2>
+      <h2 className="mt-4 text-display-md">{t(`booking.step${step}` as string)}</h2>
 
       <div className="mt-10">
         {step === 1 && (
@@ -202,8 +203,8 @@ export default function BookingFlow() {
               {SERVICES.map((s) => (
                 <label
                   key={s.id}
-                  className={`flex cursor-pointer items-start gap-3 border p-5 transition-colors duration-250 ${
-                    serviceId === s.id ? 'border-ink bg-white' : 'border-ink/15 hover:border-ink/40'
+                  className={`flex cursor-pointer items-start gap-3 border p-5 transition-colors duration-400 ease-luxe ${
+                    serviceId === s.id ? 'border-ink bg-white' : 'border-ink/12 hover:border-ink'
                   }`}
                 >
                   <input
@@ -218,8 +219,8 @@ export default function BookingFlow() {
                     className="mt-1.5 h-4 w-4 flex-none accent-[#7A5F18]"
                   />
                   <span>
-                    <span className="block font-display text-[1.1rem] text-ink">{L(s.name)}</span>
-                    <span className="mt-1 block text-xs text-ink-muted">
+                    <span className="block font-display text-[1.15rem] text-ink">{L(s.name)}</span>
+                    <span className="mt-1.5 block font-body text-label font-medium uppercase text-ink-faint">
                       {formatDuration(s.minutes, lang)} · {s.price || t('services.quote')}
                     </span>
                   </span>
@@ -234,8 +235,8 @@ export default function BookingFlow() {
             <legend className="sr-only">{t('booking.step2')}</legend>
             <div className="grid gap-3 sm:grid-cols-2">
               <label
-                className={`flex cursor-pointer items-start gap-3 border p-5 transition-colors duration-250 ${
-                  specialistId === ANY_SPECIALIST ? 'border-ink bg-white' : 'border-ink/15 hover:border-ink/40'
+                className={`flex cursor-pointer items-start gap-3 border p-5 transition-colors duration-400 ease-luxe ${
+                  specialistId === ANY_SPECIALIST ? 'border-ink bg-white' : 'border-ink/12 hover:border-ink'
                 }`}
               >
                 <input
@@ -249,16 +250,16 @@ export default function BookingFlow() {
                   className="mt-1.5 h-4 w-4 flex-none accent-[#7A5F18]"
                 />
                 <span>
-                  <span className="block font-display text-[1.1rem] text-ink">{t('booking.anyone')}</span>
-                  <span className="mt-1 block text-xs text-ink-muted">{t('booking.anyoneNote')}</span>
+                  <span className="block font-display text-[1.15rem] text-ink">{t('booking.anyone')}</span>
+                  <span className="mt-1.5 block font-body text-label font-medium uppercase text-ink-faint">{t('booking.anyoneNote')}</span>
                 </span>
               </label>
 
               {SPECIALISTS.map((s) => (
                 <label
                   key={s.id}
-                  className={`flex cursor-pointer items-start gap-3 border p-5 transition-colors duration-250 ${
-                    specialistId === s.id ? 'border-ink bg-white' : 'border-ink/15 hover:border-ink/40'
+                  className={`flex cursor-pointer items-start gap-3 border p-5 transition-colors duration-400 ease-luxe ${
+                    specialistId === s.id ? 'border-ink bg-white' : 'border-ink/12 hover:border-ink'
                   }`}
                 >
                   <input
@@ -272,8 +273,8 @@ export default function BookingFlow() {
                     className="mt-1.5 h-4 w-4 flex-none accent-[#7A5F18]"
                   />
                   <span>
-                    <span className="block font-display text-[1.1rem] text-ink">{s.name}</span>
-                    <span className="mt-1 block text-xs text-ink-muted">{L(s.role)}</span>
+                    <span className="block font-display text-[1.15rem] text-ink">{s.name}</span>
+                    <span className="mt-1.5 block font-body text-label font-medium uppercase text-ink-faint">{L(s.role)}</span>
                   </span>
                 </label>
               ))}
@@ -297,19 +298,21 @@ export default function BookingFlow() {
                     setTime('');
                   }}
                   aria-pressed={selected}
-                  className={`min-h-[76px] border p-3 text-left transition-colors duration-250 ${
+                  className={`min-h-[84px] border p-3.5 text-left transition-colors duration-400 ease-luxe ${
                     unavailable
-                      ? 'cursor-not-allowed border-ink/10 text-ink-muted/40 line-through'
+                      ? 'cursor-not-allowed border-ink/10 text-ink-faint/50 line-through'
                       : selected
                         ? 'cursor-pointer border-ink bg-ink text-cream'
-                        : 'cursor-pointer border-ink/15 hover:border-ink/40'
+                        : 'cursor-pointer border-ink/12 hover:border-ink'
                   }`}
                 >
-                  <span className="block text-[0.62rem] font-semibold uppercase tracking-[0.14em] opacity-70">
+                  <span className="block font-body text-label font-medium uppercase opacity-65">
                     {d.toLocaleDateString(lang === 'es' ? 'es-US' : 'en-US', { weekday: 'short' })}
                   </span>
-                  <span className="mt-1 block font-display text-[1.3rem]">{d.getDate()}</span>
-                  <span className="block text-[0.62rem] uppercase tracking-[0.12em] opacity-70">
+                  <span className="mt-1.5 block font-display text-[1.45rem] leading-none">
+                    {d.getDate()}
+                  </span>
+                  <span className="mt-1.5 block font-body text-label font-medium uppercase opacity-65">
                     {d.toLocaleDateString(lang === 'es' ? 'es-US' : 'en-US', { month: 'short' })}
                   </span>
                 </button>
@@ -330,8 +333,8 @@ export default function BookingFlow() {
                     type="button"
                     onClick={() => setTime(s)}
                     aria-pressed={time === s}
-                    className={`min-h-[48px] cursor-pointer border text-sm font-medium transition-colors duration-250 ${
-                      time === s ? 'border-ink bg-ink text-cream' : 'border-ink/15 hover:border-ink/40'
+                    className={`min-h-[52px] cursor-pointer border font-body text-sm tabular-nums transition-colors duration-400 ease-luxe ${
+                      time === s ? 'border-ink bg-ink text-cream' : 'border-ink/12 hover:border-ink'
                     }`}
                   >
                     {formatTime(s, lang)}
@@ -525,10 +528,10 @@ function Summary({
   const specialist = SPECIALISTS.find((s) => s.id === specialistId);
 
   return (
-    <div className="border border-gold/50 bg-cream-deep p-6">
+    <div className="border-y border-ink/12 bg-cream-deep px-6 py-7">
       <p className="eyebrow">{t('booking.summary')}</p>
-      <p className="mt-3 font-display text-[1.25rem] text-ink">{serviceName}</p>
-      <p className="mt-1 text-sm text-ink-muted">
+      <p className="mt-4 text-display-sm text-ink">{serviceName}</p>
+      <p className="mt-2 text-sm text-ink-muted">
         {parseLocalDate(date).toLocaleDateString(lang === 'es' ? 'es-US' : 'en-US', {
           weekday: 'long',
           month: 'long',
@@ -551,17 +554,23 @@ function Confirmation({ appt, onAnother }: { appt: Appointment; onAnother: () =>
   const specialist = SPECIALISTS.find((s) => s.id === appt.specialistId);
 
   return (
-    <div className="shell max-w-2xl py-section text-center">
+    <div className="shell-narrow max-w-2xl py-section text-center">
       <div className="mx-auto flex h-16 w-16 items-center justify-center rounded-full border border-gold">
-        <svg viewBox="0 0 24 24" className="h-7 w-7 text-gold-text" fill="none" stroke="currentColor" strokeWidth="2">
+        <svg
+          viewBox="0 0 24 24"
+          className="h-7 w-7 text-gold-text"
+          fill="none"
+          stroke="currentColor"
+          strokeWidth="1.4"
+        >
           <path strokeLinecap="round" strokeLinejoin="round" d="m4.5 12.75 6 6 9-13.5" />
         </svg>
       </div>
 
-      <h2 className="mt-8 text-[clamp(2rem,5vw,3rem)]">{t('booking.done')}</h2>
-      <p className="mt-4 text-ink-muted">{t('booking.doneBody')}</p>
+      <h2 className="mt-9 text-display-lg">{t('booking.done')}</h2>
+      <p className="mx-auto mt-5 max-w-prose text-ink-muted">{t('booking.doneBody')}</p>
 
-      <dl className="mx-auto mt-10 max-w-md divide-y divide-ink/10 border-y border-ink/10 text-left">
+      <dl className="mx-auto mt-11 max-w-md divide-y divide-ink/10 border-y border-ink/10 text-left">
         <Row label={t('booking.labelService')} value={service ? L(service.name) : ''} />
         <Row
           label={t('booking.labelDate')}
@@ -589,7 +598,7 @@ function Confirmation({ appt, onAnother }: { appt: Appointment; onAnother: () =>
         </button>
       </div>
 
-      <p className="mx-auto mt-10 max-w-md border border-gold/50 bg-cream-deep p-4 text-xs leading-relaxed text-ink-muted">
+      <p className="mx-auto mt-11 max-w-md border-l border-gold bg-cream-deep p-5 text-left text-xs leading-relaxed text-ink-muted">
         {t('booking.demoNotice')}
       </p>
 
@@ -603,8 +612,8 @@ function Confirmation({ appt, onAnother }: { appt: Appointment; onAnother: () =>
 function Row({ label, value }: { label: string; value: string }) {
   return (
     <div className="flex justify-between gap-6 py-3">
-      <dt className="text-[0.7rem] font-semibold uppercase tracking-[0.14em] text-ink-muted">{label}</dt>
-      <dd className="text-right text-sm font-medium text-ink">{value}</dd>
+      <dt className="font-body text-label font-medium uppercase text-ink-faint">{label}</dt>
+      <dd className="text-right text-sm text-ink">{value}</dd>
     </div>
   );
 }

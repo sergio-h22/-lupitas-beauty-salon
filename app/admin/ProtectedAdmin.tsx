@@ -2,7 +2,7 @@
 
 import { useEffect, useState, useRef } from 'react';
 import { useRouter } from 'next/navigation';
-import { supabase } from '@/lib/supabase';
+import { getSupabase, isAuthConfigured } from '@/lib/supabase';
 import { addAuditLog } from '@/lib/audit-log';
 import AdminClient from './AdminClient';
 
@@ -10,89 +10,102 @@ const INACTIVITY_TIMEOUT_MS = 30 * 60 * 1000; // 30 minutes
 
 export default function ProtectedAdmin() {
   const router = useRouter();
-  const [isAuthenticated, setIsAuthenticated] = useState(false);
-  const [isLoading, setIsLoading] = useState(true);
-  const inactivityTimeoutRef = useRef<NodeJS.Timeout>();
+  const [state, setState] = useState<'checking' | 'authed' | 'denied' | 'unconfigured'>('checking');
+  const inactivityTimeoutRef = useRef<ReturnType<typeof setTimeout> | undefined>(undefined);
   const userEmailRef = useRef<string>('');
 
-  const resetInactivityTimer = () => {
-    if (inactivityTimeoutRef.current) {
-      clearTimeout(inactivityTimeoutRef.current);
+  useEffect(() => {
+    // Without Supabase keys there is no auth to enforce. Say so plainly rather
+    // than bouncing to a login screen that cannot possibly succeed.
+    if (!isAuthConfigured()) {
+      setState('unconfigured');
+      return;
     }
 
-    inactivityTimeoutRef.current = setTimeout(async () => {
-      addAuditLog('LOGOUT', userEmailRef.current || 'unknown', true, { reason: 'inactivity' });
-      await supabase.auth.signOut();
-      router.push('/admin/login?reason=session-expired');
-    }, INACTIVITY_TIMEOUT_MS);
-  };
+    const supabase = getSupabase();
 
-  useEffect(() => {
-    async function checkAuth() {
+    const resetInactivityTimer = () => {
+      if (inactivityTimeoutRef.current) clearTimeout(inactivityTimeoutRef.current);
+      inactivityTimeoutRef.current = setTimeout(async () => {
+        addAuditLog('LOGOUT', userEmailRef.current || 'unknown', true, { reason: 'inactivity' });
+        await supabase.auth.signOut();
+        router.push('/admin/login?reason=session-expired');
+      }, INACTIVITY_TIMEOUT_MS);
+    };
+
+    let cancelled = false;
+
+    (async () => {
       try {
         const { data } = await supabase.auth.getSession();
+        if (cancelled) return;
 
         if (!data.session) {
+          setState('denied');
           router.push('/admin/login');
           return;
         }
 
         userEmailRef.current = data.session.user?.email || '';
         addAuditLog('LOGIN', userEmailRef.current, true);
-        setIsAuthenticated(true);
+        setState('authed');
         resetInactivityTimer();
       } catch (error) {
         console.error('Auth check failed:', error);
-        router.push('/admin/login');
-      } finally {
-        setIsLoading(false);
+        if (!cancelled) {
+          setState('denied');
+          router.push('/admin/login');
+        }
       }
-    }
+    })();
 
-    checkAuth();
+    const events = ['mousedown', 'keydown', 'scroll', 'touchstart'] as const;
+    const handleActivity = () => resetInactivityTimer();
+    events.forEach((event) => document.addEventListener(event, handleActivity, { passive: true }));
 
-    // Set up inactivity listener
-    const events = ['mousedown', 'keydown', 'scroll', 'touchstart'];
-    const handleActivity = () => {
-      resetInactivityTimer();
-    };
-
-    events.forEach((event) => {
-      document.addEventListener(event, handleActivity);
-    });
-
-    // Listen for auth changes
-    const { data: { subscription } } = supabase.auth.onAuthStateChange((event, session) => {
+    const {
+      data: { subscription },
+    } = supabase.auth.onAuthStateChange((_event, session) => {
       if (!session) {
+        setState('denied');
         router.push('/admin/login');
       }
     });
 
     return () => {
-      events.forEach((event) => {
-        document.removeEventListener(event, handleActivity);
-      });
-      if (inactivityTimeoutRef.current) {
-        clearTimeout(inactivityTimeoutRef.current);
-      }
+      cancelled = true;
+      events.forEach((event) => document.removeEventListener(event, handleActivity));
+      if (inactivityTimeoutRef.current) clearTimeout(inactivityTimeoutRef.current);
       subscription?.unsubscribe();
     };
   }, [router]);
 
-  if (isLoading) {
+  if (state === 'unconfigured') {
     return (
-      <div className="flex min-h-screen items-center justify-center">
-        <div className="text-center">
-          <div className="mb-4 h-8 w-8 animate-spin rounded-full border-4 border-ink/20 border-t-ink"></div>
-          <p className="text-ink-muted">Loading dashboard...</p>
+      <div className="shell py-section">
+        <div className="max-w-prose border border-rose-text/30 bg-rose/10 p-8">
+          <h1 className="text-display-sm">Authentication is not configured</h1>
+          <p className="mt-4 text-sm leading-relaxed text-ink-muted">
+            This dashboard is unprotected until Supabase keys are set. Add{' '}
+            <code className="font-mono text-ink">NEXT_PUBLIC_SUPABASE_URL</code> and{' '}
+            <code className="font-mono text-ink">NEXT_PUBLIC_SUPABASE_ANON_KEY</code> to{' '}
+            <code className="font-mono text-ink">.env.local</code>, then create an owner account in
+            the Supabase dashboard. Do not deploy this page publicly until that is done.
+          </p>
         </div>
       </div>
     );
   }
 
-  if (!isAuthenticated) {
-    return null;
+  if (state === 'checking') {
+    return (
+      <div className="flex min-h-[60vh] items-center justify-center">
+        <p className="font-body text-label font-medium uppercase text-ink-faint">Loading…</p>
+      </div>
+    );
   }
+
+  if (state !== 'authed') return null;
 
   return <AdminClient />;
 }

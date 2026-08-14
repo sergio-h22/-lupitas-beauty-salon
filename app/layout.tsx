@@ -1,5 +1,5 @@
 import type { Metadata } from 'next';
-import { Playfair_Display, Inter } from 'next/font/google';
+import { Playfair_Display, Jost } from 'next/font/google';
 import './globals.css';
 import { LanguageProvider } from '@/lib/i18n';
 import Header from '@/components/Header';
@@ -8,16 +8,25 @@ import SkipLink from '@/components/SkipLink';
 import MobileCallBar from '@/components/MobileCallBar';
 import { BUSINESS, ADDRESS_LINE, HOURS } from '@/lib/business';
 
+/**
+ * Five weights total, down from nine.
+ *
+ * Playfair carries every heading at a single regular weight — a high-contrast
+ * serif set large does not need bolding, and faux-bolding it is what makes a
+ * display face look cheap. Jost (a geometric in the Futura lineage) replaces
+ * Inter for UI and body: Inter is the default of every generated template, and
+ * tracked-out uppercase is exactly where a geometric earns its keep.
+ */
 const display = Playfair_Display({
   subsets: ['latin'],
-  weight: ['400', '500', '600', '700'],
+  weight: ['400', '500'],
   variable: '--font-display',
   display: 'swap',
 });
 
-const body = Inter({
+const body = Jost({
   subsets: ['latin'],
-  weight: ['300', '400', '500', '600', '700'],
+  weight: ['300', '400', '500'],
   variable: '--font-body',
   display: 'swap',
 });
@@ -109,6 +118,14 @@ function schema() {
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
     <html lang="en" className={`${display.variable} ${body.variable}`}>
+      <head>
+        {/* Scroll reveals start at opacity 0 and are switched on by an
+            IntersectionObserver. Without JS that observer never runs, so the
+            resting state has to be restored here or the page reads as blank. */}
+        <noscript>
+          <style>{`.reveal,.reveal-mask>*,.reveal-rule{opacity:1!important;transform:none!important}`}</style>
+        </noscript>
+      </head>
       <body>
         <script
           type="application/ld+json"
