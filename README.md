@@ -11,7 +11,7 @@ Next.js 16 (App Router) · React 19 · TypeScript · Tailwind CSS · Framer Moti
 
 Read this section before showing the site to anyone.
 
-**Working today, no accounts required**
+**Working today, no accounts required** (except admin)
 
 - Every page: home, services, gallery, about, booking, owner dashboard, 404
 - Full five-step booking flow with real availability logic — opening hours,
@@ -20,9 +20,10 @@ Read this section before showing the site to anyone.
   that remembers the choice and auto-detects Spanish browsers
 - Local SEO: metadata, `HairSalon` structured data, sitemap, robots
 - Google Maps embed, click-to-call, directions
-- Owner dashboard: view/approve/cancel appointments, block time off
+- Owner dashboard: login-protected, view/approve/cancel appointments, block time off
 - **Stripe payment processing** — collect deposits or full payment at booking
   (optional, configurable via environment variables)
+- **Admin authentication** — `/admin` requires email + password login (via Supabase)
 
 **Not real yet — needs an account and keys**
 
@@ -34,17 +35,12 @@ Read this section before showing the site to anyone.
 | Confirmation text message | Twilio |
 | 24-hour reminders, thank-you follow-ups | A scheduled job (Vercel Cron) + the above |
 | Newsletter signup actually storing an address | An email provider |
-| A secure owner dashboard | Real authentication |
 
 Appointments currently save to `localStorage` — that is, to one browser on one
 device. Two customers booking from two phones cannot see each other's slots.
 **This is a demo of the booking experience, not a booking system yet.** The
 confirmation screen says so to the customer, and the dashboard says so to the
 owner. Do not remove those notices until the backend is connected.
-
-`/admin` has **no password**. It is `noindex`ed and excluded in `robots.txt`,
-but that hides it from search engines, not from people. Put it behind real
-authentication before the site goes live.
 
 ---
 
@@ -81,6 +77,35 @@ When payments are enabled:
 - Deposits are collected at booking time
 - Payment data is encrypted and handled by Stripe (never stored locally)
 - Failing to process a test payment? Stripe test mode accepts `4242 4242 4242 4242` with any future expiry and any CVC
+
+---
+
+## Admin Dashboard Authentication (Recommended)
+
+Protect the owner dashboard with a login:
+
+1. Create a free [Supabase account](https://supabase.com)
+2. Copy `.env.local.example` to `.env.local`
+3. Add your Supabase keys from the [Supabase Dashboard](https://app.supabase.com):
+   - `NEXT_PUBLIC_SUPABASE_URL` — your project URL
+   - `NEXT_PUBLIC_SUPABASE_ANON_KEY` — your anon key
+4. Create an owner account in Supabase:
+   - Go to **Authentication** → **Users**
+   - Click **Add user**
+   - Enter owner email + password
+5. Test: Visit `/admin/login` and sign in with those credentials
+
+**After enabling authentication:**
+- `/admin` now requires login
+- Owner signs in at `/admin/login`
+- Session expires after inactivity
+- Sign out button available in dashboard header
+- Test account: use any email + password you set in Supabase
+
+**What's still demo mode:**
+- Appointments still save to browser `localStorage`
+- Two devices cannot see each other's bookings
+- When you connect a database (next step), appointments will be real
 
 ---
 

@@ -1,11 +1,11 @@
 import type { Metadata } from 'next';
-import AdminClient from './AdminClient';
+import ProtectedAdmin from './ProtectedAdmin';
 
 export const metadata: Metadata = {
-  title: 'Owner Dashboard (Demo)',
+  title: 'Owner Dashboard',
   robots: { index: false, follow: false },
 };
 
 export default function AdminPage() {
-  return <AdminClient />;
+  return <ProtectedAdmin />;
 }

@@ -1,9 +1,11 @@
 'use client';
 
 import { useEffect, useMemo, useState } from 'react';
+import { useRouter } from 'next/navigation';
 import { useLang, useLocalized } from '@/lib/i18n';
 import { serviceById } from '@/lib/services';
 import { SPECIALISTS } from '@/lib/specialists';
+import { signOut } from '@/lib/supabase';
 import {
   Appointment,
   loadAppointments,
@@ -19,6 +21,7 @@ import {
 type Filter = 'upcoming' | 'all' | 'pending' | 'cancelled';
 
 export default function AdminClient() {
+  const router = useRouter();
   const { lang } = useLang();
   const L = useLocalized();
   const [appts, setAppts] = useState<Appointment[]>([]);
@@ -26,6 +29,18 @@ export default function AdminClient() {
   const [filter, setFilter] = useState<Filter>('upcoming');
   const [blockDate, setBlockDate] = useState('');
   const [blockTime, setBlockTime] = useState('10:00');
+  const [loggingOut, setLoggingOut] = useState(false);
+
+  async function handleLogout() {
+    setLoggingOut(true);
+    try {
+      await signOut();
+      router.push('/admin/login');
+    } catch (error) {
+      console.error('Logout failed:', error);
+      setLoggingOut(false);
+    }
+  }
 
   useEffect(() => {
     setAppts(loadAppointments());
@@ -73,15 +88,23 @@ export default function AdminClient() {
 
   return (
     <div className="shell py-16">
-      <div className="border border-rose-text/40 bg-rose/10 p-5">
-        <p className="text-sm font-semibold text-ink">Demo dashboard — not a secure admin area.</p>
-        <p className="mt-1 text-sm text-ink-muted">
-          This page reads appointments from this browser&rsquo;s local storage. It has no authentication and no
-          server. Before real use, move appointments to a database and put this behind proper login.
-        </p>
+      <div className="mb-8 flex items-center justify-between">
+        <h1 className="text-[clamp(1.8rem,4vw,2.6rem)]">Appointments</h1>
+        <button
+          type="button"
+          onClick={handleLogout}
+          disabled={loggingOut}
+          className="btn-outline disabled:cursor-not-allowed disabled:opacity-35"
+        >
+          {loggingOut ? 'Signing out...' : 'Sign Out'}
+        </button>
       </div>
 
-      <h1 className="mt-10 text-[clamp(1.8rem,4vw,2.6rem)]">Appointments</h1>
+      <div className="border border-ink/15 bg-cream-deep p-5">
+        <p className="text-sm text-ink-muted">
+          Appointments are saved to browser local storage. Before launching, connect to a real database so bookings persist across devices and browsers.
+        </p>
+      </div>
 
       <dl className="mt-8 grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
         <Stat label="Upcoming" value={String(stats.upcoming)} />
