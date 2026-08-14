@@ -1,0 +1,116 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    --header-h: 72px;
+  }
+
+  html {
+    scroll-behavior: smooth;
+    -webkit-text-size-adjust: 100%;
+    scroll-padding-top: var(--header-h);
+  }
+
+  body {
+    @apply bg-cream text-ink-soft font-body antialiased;
+    font-size: 16px;
+    line-height: 1.65;
+    overflow-x: hidden;
+    /* Clears the fixed mobile call bar, including the iOS home indicator. */
+    padding-bottom: calc(56px + env(safe-area-inset-bottom));
+  }
+
+  @media (min-width: 768px) {
+    body {
+      padding-bottom: 0;
+    }
+  }
+
+  h1, h2, h3, h4 {
+    @apply font-display text-ink;
+    line-height: 1.15;
+    text-wrap: balance;
+  }
+
+  :focus-visible {
+    outline: 2px solid theme('colors.gold.text');
+    outline-offset: 3px;
+    border-radius: 2px;
+  }
+
+  img, video {
+    max-width: 100%;
+    display: block;
+  }
+
+  ::selection {
+    @apply bg-ink text-cream;
+  }
+}
+
+@layer components {
+  .shell {
+    width: min(theme('maxWidth.shell'), 100% - clamp(2rem, 6vw, 6rem));
+    margin-inline: auto;
+  }
+
+  .eyebrow {
+    @apply font-body text-[0.7rem] font-semibold uppercase tracking-[0.24em] text-gold-text;
+  }
+
+  /* Gold is decorative only on light ground — it fails contrast as text there. */
+  .rule-gold {
+    @apply h-px w-12 bg-gold;
+  }
+
+  .btn {
+    @apply inline-flex min-h-[48px] cursor-pointer items-center justify-center gap-2
+           px-7 text-[0.78rem] font-semibold uppercase tracking-[0.14em]
+           transition-colors duration-250;
+  }
+
+  .btn-primary {
+    @apply btn bg-ink text-cream hover:bg-gold-text;
+  }
+
+  .btn-outline {
+    @apply btn border border-ink/25 text-ink hover:border-ink hover:bg-ink hover:text-cream;
+  }
+
+  .btn-ondark {
+    @apply btn bg-gold text-ink hover:bg-cream;
+  }
+
+  .card {
+    @apply border border-ink/10 bg-white/60 transition-shadow duration-250 hover:shadow-[0_18px_50px_-24px_rgba(17,17,17,0.35)];
+  }
+
+  .field-label {
+    @apply mb-2 block text-[0.72rem] font-semibold uppercase tracking-[0.16em] text-ink;
+  }
+
+  .field-input {
+    @apply w-full min-h-[48px] border border-ink/20 bg-white px-4 py-3 text-base text-ink
+           placeholder:text-ink-muted/60 focus:border-gold-text;
+  }
+
+  .placeholder-tile {
+    @apply flex flex-col items-center justify-center gap-2 border border-dashed border-ink/20
+           bg-cream-deep text-center text-ink-muted;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}
