@@ -5,6 +5,8 @@ Marketing site and appointment-booking interface for Lupita's Beauty Salon,
 
 Next.js 16 (App Router) · React 19 · TypeScript · Tailwind CSS · Framer Motion.
 
+**📋 [Security & Best Practices](./SECURITY.md)** — Read before deploying to production
+
 ---
 
 ## What is real and what is not
@@ -24,6 +26,12 @@ Read this section before showing the site to anyone.
 - **Stripe payment processing** — collect deposits or full payment at booking
   (optional, configurable via environment variables)
 - **Admin authentication** — `/admin` requires email + password login (via Supabase)
+- **Security hardened**:
+  - 30-minute inactivity timeout
+  - Rate limiting (prevent brute force)
+  - Security headers (HSTS, CSP, X-Frame-Options, etc.)
+  - Audit logging (login, appointments, changes)
+  - Input validation & XSS protection
 
 **Not real yet — needs an account and keys**
 

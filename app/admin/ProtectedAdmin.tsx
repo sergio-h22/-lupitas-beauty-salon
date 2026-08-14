@@ -1,14 +1,31 @@
 'use client';
 
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useRef } from 'react';
 import { useRouter } from 'next/navigation';
 import { supabase } from '@/lib/supabase';
+import { addAuditLog } from '@/lib/audit-log';
 import AdminClient from './AdminClient';
+
+const INACTIVITY_TIMEOUT_MS = 30 * 60 * 1000; // 30 minutes
 
 export default function ProtectedAdmin() {
   const router = useRouter();
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
+  const inactivityTimeoutRef = useRef<NodeJS.Timeout>();
+  const userEmailRef = useRef<string>('');
+
+  const resetInactivityTimer = () => {
+    if (inactivityTimeoutRef.current) {
+      clearTimeout(inactivityTimeoutRef.current);
+    }
+
+    inactivityTimeoutRef.current = setTimeout(async () => {
+      addAuditLog('LOGOUT', userEmailRef.current || 'unknown', true, { reason: 'inactivity' });
+      await supabase.auth.signOut();
+      router.push('/admin/login?reason=session-expired');
+    }, INACTIVITY_TIMEOUT_MS);
+  };
 
   useEffect(() => {
     async function checkAuth() {
@@ -20,7 +37,10 @@ export default function ProtectedAdmin() {
           return;
         }
 
+        userEmailRef.current = data.session.user?.email || '';
+        addAuditLog('LOGIN', userEmailRef.current, true);
         setIsAuthenticated(true);
+        resetInactivityTimer();
       } catch (error) {
         console.error('Auth check failed:', error);
         router.push('/admin/login');
@@ -31,6 +51,16 @@ export default function ProtectedAdmin() {
 
     checkAuth();
 
+    // Set up inactivity listener
+    const events = ['mousedown', 'keydown', 'scroll', 'touchstart'];
+    const handleActivity = () => {
+      resetInactivityTimer();
+    };
+
+    events.forEach((event) => {
+      document.addEventListener(event, handleActivity);
+    });
+
     // Listen for auth changes
     const { data: { subscription } } = supabase.auth.onAuthStateChange((event, session) => {
       if (!session) {
@@ -38,7 +68,15 @@ export default function ProtectedAdmin() {
       }
     });
 
-    return () => subscription?.unsubscribe();
+    return () => {
+      events.forEach((event) => {
+        document.removeEventListener(event, handleActivity);
+      });
+      if (inactivityTimeoutRef.current) {
+        clearTimeout(inactivityTimeoutRef.current);
+      }
+      subscription?.unsubscribe();
+    };
   }, [router]);
 
   if (isLoading) {

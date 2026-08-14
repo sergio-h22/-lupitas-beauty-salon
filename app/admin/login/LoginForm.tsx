@@ -16,11 +16,41 @@ export default function LoginForm() {
     setError('');
     setLoading(true);
 
+    // Client-side validation
+    if (!email || !password) {
+      setError('Email and password are required');
+      setLoading(false);
+      return;
+    }
+
+    if (!/^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(email)) {
+      setError('Please enter a valid email address');
+      setLoading(false);
+      return;
+    }
+
+    if (password.length < 6) {
+      setError('Password must be at least 6 characters');
+      setLoading(false);
+      return;
+    }
+
     try {
       await signInWithEmail(email, password);
       router.push('/admin');
     } catch (err) {
-      setError(err instanceof Error ? err.message : 'Login failed');
+      const message = err instanceof Error ? err.message : 'Login failed';
+
+      // User-friendly error messages
+      if (message.includes('Invalid login credentials')) {
+        setError('Email or password is incorrect');
+      } else if (message.includes('too many requests')) {
+        setError('Too many login attempts. Please try again in 15 minutes');
+      } else if (message.includes('Email not confirmed')) {
+        setError('Please verify your email address first');
+      } else {
+        setError(message);
+      }
     } finally {
       setLoading(false);
     }

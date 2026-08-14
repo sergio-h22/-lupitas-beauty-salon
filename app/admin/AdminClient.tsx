@@ -5,7 +5,8 @@ import { useRouter } from 'next/navigation';
 import { useLang, useLocalized } from '@/lib/i18n';
 import { serviceById } from '@/lib/services';
 import { SPECIALISTS } from '@/lib/specialists';
-import { signOut } from '@/lib/supabase';
+import { signOut, getCurrentUser } from '@/lib/supabase';
+import { addAuditLog } from '@/lib/audit-log';
 import {
   Appointment,
   loadAppointments,
@@ -31,9 +32,12 @@ export default function AdminClient() {
   const [blockTime, setBlockTime] = useState('10:00');
   const [loggingOut, setLoggingOut] = useState(false);
 
+  const [userEmail, setUserEmail] = useState('');
+
   async function handleLogout() {
     setLoggingOut(true);
     try {
+      addAuditLog('LOGOUT', userEmail, true);
       await signOut();
       router.push('/admin/login');
     } catch (error) {
@@ -45,6 +49,20 @@ export default function AdminClient() {
   useEffect(() => {
     setAppts(loadAppointments());
     setBlocked(loadBlocked());
+
+    // Get current user email for audit logging
+    async function getUser() {
+      try {
+        const user = await getCurrentUser();
+        if (user?.email) {
+          setUserEmail(user.email);
+        }
+      } catch (err) {
+        console.error('Failed to get user:', err);
+      }
+    }
+
+    getUser();
   }, []);
 
   const todayKey = formatDateKey(new Date());
@@ -68,7 +86,16 @@ export default function AdminClient() {
   }, [appts, todayKey]);
 
   function setStatus(id: string, status: Appointment['status']) {
+    const appt = appts.find((a) => a.id === id);
     setAppts(updateAppointment(id, { status }));
+
+    // Log the action
+    const action = status === 'approved' ? 'APPOINTMENT_APPROVED' : 'APPOINTMENT_CANCELLED';
+    addAuditLog(action as any, userEmail, true, {
+      appointmentId: id,
+      customerName: appt?.name,
+      newStatus: status,
+    });
   }
 
   function addBlock() {
@@ -78,12 +105,21 @@ export default function AdminClient() {
     const next = [...blocked, key];
     setBlocked(next);
     saveBlocked(next);
+
+    addAuditLog('TIME_BLOCKED', userEmail, true, {
+      date: blockDate,
+      time: blockTime,
+    });
   }
 
   function removeBlock(key: string) {
     const next = blocked.filter((k) => k !== key);
     setBlocked(next);
     saveBlocked(next);
+
+    addAuditLog('TIME_UNBLOCKED', userEmail, true, {
+      blockedSlot: key,
+    });
   }
 
   return (
