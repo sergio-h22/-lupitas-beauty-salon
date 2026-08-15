@@ -209,4 +209,4 @@ npm test
 
 ## Questions?
 
-For security issues, DO NOT post on GitHub. Email support@lupitassalon.com with details.
+For security issues, DO NOT post on GitHub. Email the address in `lib/business.ts` (`BUSINESS.email`) with details.

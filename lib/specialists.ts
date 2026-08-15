@@ -9,12 +9,17 @@ export type Specialist = {
   services: string[];
 };
 
-// Placeholder names and copy — replace with the real team before launch.
+/**
+ * PLACEHOLDER TEAM — names, roles and biographies are all stand-ins. Replace
+ * every entry with the studio's real stylists before launch: these names are
+ * offered to clients as the person who will be cutting their hair, and the
+ * booking flow assigns appointments by the `id` field below.
+ */
 export const SPECIALISTS: Specialist[] = [
   {
     id: 'specialist-1',
-    name: 'Specialist One',
-    role: { en: 'Master Stylist & Owner', es: 'Estilista Principal y Propietaria' },
+    name: 'Stylist One',
+    role: { en: 'Founder & Master Stylist', es: 'Fundadora y Estilista Principal' },
     bio: {
       en: 'Placeholder biography. Replace with this stylist’s real experience, specialties and years in the chair.',
       es: 'Biografía de ejemplo. Reemplazar con la experiencia real, especialidades y años de trayectoria.',
@@ -24,8 +29,8 @@ export const SPECIALISTS: Specialist[] = [
   },
   {
     id: 'specialist-2',
-    name: 'Specialist Two',
-    role: { en: 'Color Specialist', es: 'Especialista en Color' },
+    name: 'Stylist Two',
+    role: { en: 'Colour Specialist', es: 'Especialista en Color' },
     bio: {
       en: 'Placeholder biography. Replace with this stylist’s real experience, specialties and years in the chair.',
       es: 'Biografía de ejemplo. Reemplazar con la experiencia real, especialidades y años de trayectoria.',
@@ -35,8 +40,8 @@ export const SPECIALISTS: Specialist[] = [
   },
   {
     id: 'specialist-3',
-    name: 'Specialist Three',
-    role: { en: 'Stylist', es: 'Estilista' },
+    name: 'Stylist Three',
+    role: { en: 'Cutting Specialist', es: 'Especialista en Corte' },
     bio: {
       en: 'Placeholder biography. Replace with this stylist’s real experience, specialties and years in the chair.',
       es: 'Biografía de ejemplo. Reemplazar con la experiencia real, especialidades y años de trayectoria.',

@@ -182,7 +182,7 @@ export default function BookingFlow() {
               <span
                 aria-current={n === step ? 'step' : undefined}
                 className={`block h-0.5 w-full transition-colors duration-600 ease-luxe ${
-                  n < step ? 'bg-gold' : n === step ? 'bg-ink' : 'bg-ink/12'
+                  n < step ? 'bg-sand' : n === step ? 'bg-ink' : 'bg-ink/12'
                 }`}
               />
             </li>
@@ -302,7 +302,7 @@ export default function BookingFlow() {
                     unavailable
                       ? 'cursor-not-allowed border-ink/10 text-ink-faint/50 line-through'
                       : selected
-                        ? 'cursor-pointer border-ink bg-ink text-cream'
+                        ? 'cursor-pointer border-ink bg-ink text-bone'
                         : 'cursor-pointer border-ink/12 hover:border-ink'
                   }`}
                 >
@@ -324,7 +324,7 @@ export default function BookingFlow() {
         {step === 4 && (
           <>
             {slots.length === 0 ? (
-              <p className="border border-rose/50 bg-rose/10 p-5 text-sm text-ink">{t('booking.noSlots')}</p>
+              <p className="border border-alert/50 bg-alert/10 p-5 text-sm text-ink">{t('booking.noSlots')}</p>
             ) : (
               <div className="grid grid-cols-3 gap-2 sm:grid-cols-4 lg:grid-cols-6">
                 {slots.map((s) => (
@@ -334,7 +334,7 @@ export default function BookingFlow() {
                     onClick={() => setTime(s)}
                     aria-pressed={time === s}
                     className={`min-h-[52px] cursor-pointer border font-body text-sm tabular-nums transition-colors duration-400 ease-luxe ${
-                      time === s ? 'border-ink bg-ink text-cream' : 'border-ink/12 hover:border-ink'
+                      time === s ? 'border-ink bg-ink text-bone' : 'border-ink/12 hover:border-ink'
                     }`}
                   >
                     {formatTime(s, lang)}
@@ -408,7 +408,7 @@ export default function BookingFlow() {
               </>
             ) : (
               <>
-                <div className="border border-ink/10 bg-cream-deep p-4">
+                <div className="border border-ink/10 bg-bone-deep p-4">
                   <p className="text-sm font-medium text-ink-muted">
                     Payment for {service ? L(service.name) : 'your appointment'}
                   </p>
@@ -418,7 +418,7 @@ export default function BookingFlow() {
                 </div>
 
                 {paymentError && (
-                  <p className="rounded border border-rose-text/30 bg-rose/10 p-3 text-sm font-medium text-rose-text">
+                  <p className="rounded border border-alert-text/30 bg-alert/10 p-3 text-sm font-medium text-alert-text">
                     {paymentError}
                   </p>
                 )}
@@ -501,10 +501,10 @@ function Field({
         onChange={(e) => onChange(e.target.value)}
         aria-invalid={!!error}
         aria-describedby={error ? `${id}-error` : undefined}
-        className={`field-input ${error ? 'border-rose-text' : ''}`}
+        className={`field-input ${error ? 'border-alert-text' : ''}`}
       />
       {error && (
-        <p id={`${id}-error`} className="mt-2 text-sm font-medium text-rose-text">
+        <p id={`${id}-error`} className="mt-2 text-sm font-medium text-alert-text">
           {error}
         </p>
       )}
@@ -528,7 +528,7 @@ function Summary({
   const specialist = SPECIALISTS.find((s) => s.id === specialistId);
 
   return (
-    <div className="border-y border-ink/12 bg-cream-deep px-6 py-7">
+    <div className="border-y border-ink/12 bg-bone-deep px-6 py-7">
       <p className="eyebrow">{t('booking.summary')}</p>
       <p className="mt-4 text-display-sm text-ink">{serviceName}</p>
       <p className="mt-2 text-sm text-ink-muted">
@@ -555,10 +555,10 @@ function Confirmation({ appt, onAnother }: { appt: Appointment; onAnother: () =>
 
   return (
     <div className="shell-narrow max-w-2xl py-section text-center">
-      <div className="mx-auto flex h-16 w-16 items-center justify-center rounded-full border border-gold">
+      <div className="mx-auto flex h-16 w-16 items-center justify-center rounded-full border border-sand">
         <svg
           viewBox="0 0 24 24"
-          className="h-7 w-7 text-gold-text"
+          className="h-7 w-7 text-sand-text"
           fill="none"
           stroke="currentColor"
           strokeWidth="1.4"
@@ -598,7 +598,7 @@ function Confirmation({ appt, onAnother }: { appt: Appointment; onAnother: () =>
         </button>
       </div>
 
-      <p className="mx-auto mt-11 max-w-md border-l border-gold bg-cream-deep p-5 text-left text-xs leading-relaxed text-ink-muted">
+      <p className="mx-auto mt-11 max-w-md border-l border-sand bg-bone-deep p-5 text-left text-xs leading-relaxed text-ink-muted">
         {t('booking.demoNotice')}
       </p>
 

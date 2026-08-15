@@ -136,7 +136,7 @@ export default function AdminClient() {
         </button>
       </div>
 
-      <div className="border border-ink/15 bg-cream-deep p-5">
+      <div className="border border-ink/15 bg-bone-deep p-5">
         <p className="text-sm text-ink-muted">
           Appointments are saved to browser local storage. Before launching, connect to a real database so bookings persist across devices and browsers.
         </p>
@@ -157,7 +157,7 @@ export default function AdminClient() {
             onClick={() => setFilter(f)}
             aria-pressed={filter === f}
             className={`min-h-[44px] cursor-pointer border px-5 text-[0.72rem] font-semibold uppercase tracking-[0.12em] transition-colors duration-250 ${
-              filter === f ? 'border-ink bg-ink text-cream' : 'border-ink/20 text-ink hover:border-ink'
+              filter === f ? 'border-ink bg-ink text-bone' : 'border-ink/20 text-ink hover:border-ink'
             }`}
           >
             {f}
@@ -228,7 +228,7 @@ export default function AdminClient() {
                           <button
                             type="button"
                             onClick={() => setStatus(a.id, 'cancelled')}
-                            className="min-h-[36px] cursor-pointer border border-rose-text/40 px-3 text-xs font-semibold text-rose-text hover:border-rose-text"
+                            className="min-h-[36px] cursor-pointer border border-alert-text/40 px-3 text-xs font-semibold text-alert-text hover:border-alert-text"
                           >
                             Cancel
                           </button>
@@ -282,7 +282,7 @@ export default function AdminClient() {
                 <button
                   type="button"
                   onClick={() => removeBlock(k)}
-                  className="min-h-[36px] cursor-pointer border border-ink/25 px-3 text-xs hover:border-rose-text hover:text-rose-text"
+                  className="min-h-[36px] cursor-pointer border border-ink/25 px-3 text-xs hover:border-alert-text hover:text-alert-text"
                   aria-label={`Remove block ${k}`}
                 >
                   {k.replace('T', ' · ')} ✕
@@ -307,9 +307,9 @@ function Stat({ label, value }: { label: string; value: string }) {
 
 function StatusPill({ status }: { status: Appointment['status'] }) {
   const styles: Record<Appointment['status'], string> = {
-    pending: 'border-gold-text/50 text-gold-text',
+    pending: 'border-sand-text/50 text-sand-text',
     approved: 'border-ink/30 text-ink',
-    cancelled: 'border-rose-text/40 text-rose-text',
+    cancelled: 'border-alert-text/40 text-alert-text',
   };
   return (
     <span className={`inline-block border px-2 py-1 text-[0.62rem] font-semibold uppercase tracking-[0.12em] ${styles[status]}`}>

@@ -21,18 +21,18 @@ export default function Footer() {
   const { lang } = useLang();
 
   return (
-    <footer className="bg-ink text-cream/60">
+    <footer className="bg-ink text-bone/60">
       <div className="shell grid gap-12 py-section-sm md:grid-cols-2 lg:grid-cols-12 lg:gap-10">
         <div className="lg:col-span-4">
           <Logo tone="light" />
           <p className="mt-6 max-w-measure text-sm leading-relaxed">{BUSINESS.positioning[lang]}</p>
-          <p className="mt-6 font-body text-label font-medium uppercase text-gold-soft">
-            {t('trust.seHabla')}
+          <p className="mt-6 font-body text-label font-medium uppercase text-sand-soft">
+            {t('welcome.appointment')}
           </p>
         </div>
 
         <div className="lg:col-span-3">
-          <h3 className="font-body text-label font-medium uppercase text-cream">
+          <h3 className="font-body text-label font-medium uppercase text-bone">
             {t('location.eyebrow')}
           </h3>
           <address className="mt-5 not-italic text-sm leading-relaxed">
@@ -42,7 +42,7 @@ export default function Footer() {
           </address>
           <a
             href={`tel:${BUSINESS.phoneHref}`}
-            className="mt-4 inline-flex min-h-[44px] items-center font-body text-label-lg font-medium uppercase text-gold-soft transition-colors duration-400 ease-luxe hover:text-cream"
+            className="mt-4 inline-flex min-h-[44px] items-center font-body text-label-lg font-medium uppercase text-sand-soft transition-colors duration-400 ease-luxe hover:text-bone"
           >
             {BUSINESS.phone}
           </a>
@@ -50,14 +50,14 @@ export default function Footer() {
             href={`https://www.google.com/maps/search/?api=1&query=${MAPS_QUERY}`}
             target="_blank"
             rel="noopener noreferrer"
-            className="block min-h-[44px] py-2 text-sm underline decoration-cream/25 underline-offset-4 transition-colors duration-400 ease-luxe hover:text-cream"
+            className="block min-h-[44px] py-2 text-sm underline decoration-bone/25 underline-offset-4 transition-colors duration-400 ease-luxe hover:text-bone"
           >
             {t('location.directions')}
           </a>
         </div>
 
         <div className="lg:col-span-2">
-          <h3 className="font-body text-label font-medium uppercase text-cream">
+          <h3 className="font-body text-label font-medium uppercase text-bone">
             {t('location.hours')}
           </h3>
           <dl className="mt-5 space-y-2 text-sm">
@@ -66,7 +66,7 @@ export default function Footer() {
               return (
                 <div key={day} className="flex justify-between gap-4">
                   <dt>{DAY_LABEL[day][lang]}</dt>
-                  <dd className={h.open ? 'tabular-nums' : 'text-rose'}>
+                  <dd className={h.open ? 'tabular-nums' : 'text-alert-soft'}>
                     {h.open ? `${fmt(h.open, lang)} – ${fmt(h.close!, lang)}` : t('location.closed')}
                   </dd>
                 </div>
@@ -76,36 +76,40 @@ export default function Footer() {
         </div>
 
         <div className="lg:col-span-3">
-          <h3 className="font-body text-label font-medium uppercase text-cream">
+          <h3 className="font-body text-label font-medium uppercase text-bone">
             {t('newsletter.title')}
           </h3>
           <NewsletterForm />
-          <h3 className="mt-9 font-body text-label font-medium uppercase text-cream">
+          <h3 className="mt-9 font-body text-label font-medium uppercase text-bone">
             {t('footer.social')}
           </h3>
           <p className="mt-3 text-sm">{t('footer.socialSoon')}</p>
         </div>
       </div>
 
-      {/* Oversized wordmark as a sign-off. Purely typographic, costs nothing,
-          and it is what makes a footer feel like the end of a brand's page
-          rather than the bottom of a template. */}
-      <div className="shell overflow-hidden pb-6" aria-hidden="true">
-        <p className="select-none whitespace-nowrap font-display text-[clamp(3rem,13vw,11rem)] leading-[0.85] tracking-[-0.04em] text-cream/[0.06]">
-          Lupita&rsquo;s
+      {/* Oversized signature as a sign-off — the studio's own hand, set at the
+          scale of a page rather than a business card. Purely typographic, costs
+          nothing, and it is what makes a footer feel like the end of a brand's
+          page rather than the bottom of a template.
+
+          Held at 8% rather than the 6% a serif would take: Italianno's strokes
+          are hairlines, and below that it stops resolving as a word at all. */}
+      <div className="shell overflow-hidden pb-4" aria-hidden="true">
+        <p className="signature select-none whitespace-nowrap text-[clamp(4.5rem,19vw,16rem)] text-bone/[0.08]">
+          Jaeso Studio
         </p>
       </div>
 
-      <div className="border-t border-cream/10">
+      <div className="border-t border-bone/10">
         <div className="shell flex flex-col gap-3 py-6 text-xs sm:flex-row sm:items-center sm:justify-between">
           <p>
             &copy; {new Date().getFullYear()} {BUSINESS.name}. {t('footer.rights')}
           </p>
           <nav aria-label="Footer" className="flex gap-8">
-            <Link href="/services" className="transition-colors duration-400 ease-luxe hover:text-cream">
+            <Link href="/services" className="transition-colors duration-400 ease-luxe hover:text-bone">
               {t('nav.services')}
             </Link>
-            <Link href="/book" className="transition-colors duration-400 ease-luxe hover:text-cream">
+            <Link href="/book" className="transition-colors duration-400 ease-luxe hover:text-bone">
               {t('nav.book')}
             </Link>
           </nav>
@@ -129,7 +133,7 @@ function NewsletterForm() {
   const [sent, setSent] = useState(false);
 
   if (sent) {
-    return <p className="mt-5 text-sm text-gold-soft">{t('newsletter.thanks')}</p>;
+    return <p className="mt-5 text-sm text-sand-soft">{t('newsletter.thanks')}</p>;
   }
 
   return (
@@ -152,11 +156,11 @@ function NewsletterForm() {
           value={email}
           onChange={(e) => setEmail(e.target.value)}
           placeholder={t('newsletter.placeholder')}
-          className="min-h-[48px] w-full border border-cream/20 bg-transparent px-3.5 font-body text-sm text-cream transition-colors duration-250 placeholder:text-cream/35 focus:border-gold focus:outline-none"
+          className="min-h-[48px] w-full border border-bone/20 bg-transparent px-3.5 font-body text-sm text-bone transition-colors duration-250 placeholder:text-bone/35 focus:border-sand focus:outline-none"
         />
         <button
           type="submit"
-          className="min-h-[48px] cursor-pointer whitespace-nowrap border border-cream bg-cream px-5 font-body text-label font-medium uppercase text-ink transition-colors duration-400 ease-luxe hover:border-gold-soft hover:bg-gold-soft"
+          className="min-h-[48px] cursor-pointer whitespace-nowrap border border-bone bg-bone px-5 font-body text-label font-medium uppercase text-ink transition-colors duration-400 ease-luxe hover:border-sand-soft hover:bg-sand-soft"
         >
           {t('newsletter.submit')}
         </button>

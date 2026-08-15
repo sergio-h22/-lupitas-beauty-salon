@@ -33,7 +33,7 @@ export default function HomePage() {
       <Hero />
       <TrustBand />
 
-      {/* 01 — The salon. Asymmetric: type holds the left third, photography
+      {/* 01 — The studio. Asymmetric: type holds the left third, photography
           steps down the right in an offset pair. */}
       <section className="py-section-lg">
         <div className="shell grid gap-14 lg:grid-cols-12 lg:gap-20">
@@ -48,7 +48,7 @@ export default function HomePage() {
               {t('welcome.body')}
             </Reveal>
             <Reveal delay={0.3}>
-              <p className="mt-8 border-l border-gold pl-5 font-display text-[1.15rem] italic leading-relaxed text-ink">
+              <p className="mt-8 border-l border-sand pl-5 font-display text-[1.15rem] italic leading-relaxed text-ink">
                 {BUSINESS.positioning[lang]}
               </p>
             </Reveal>
@@ -62,7 +62,7 @@ export default function HomePage() {
           <div className="grid grid-cols-2 gap-5 sm:gap-7 lg:col-span-7">
             <Reveal>
               <PhotoPlaceholder
-                label={lang === 'es' ? 'Interior del salón' : 'Salon interior'}
+                label={lang === 'es' ? 'Interior del estudio' : 'Studio interior'}
                 ratio="aspect-[3/4]"
                 sizes="(min-width: 1024px) 29vw, 45vw"
               />
@@ -79,7 +79,7 @@ export default function HomePage() {
       </section>
 
       {/* 02 — The menu, set as an index rather than a card grid. */}
-      <section className="bg-cream-deep py-section">
+      <section className="bg-bone-deep py-section">
         <div className="shell">
           <div className="flex flex-col gap-10 lg:flex-row lg:items-end lg:justify-between">
             <SectionHeading

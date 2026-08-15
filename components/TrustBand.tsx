@@ -13,10 +13,10 @@ import Reveal from './Reveal';
 export default function TrustBand() {
   const t = useT();
 
-  const items = [t('trust.seHabla'), t('trust.parking'), t('trust.disney'), t('trust.quickBook')];
+  const items = [t('trust.appointment'), t('trust.oneChair'), t('trust.consult'), t('trust.quickBook')];
 
   return (
-    <section aria-label="At a glance" className="border-b border-ink/10 bg-cream">
+    <section aria-label="At a glance" className="border-b border-ink/10 bg-bone">
       <ul className="shell grid grid-cols-2 md:grid-cols-4">
         {items.map((item, i) => (
           <Reveal
@@ -29,7 +29,7 @@ export default function TrustBand() {
               i === 2 ? 'md:border-l md:border-ink/10 md:pl-5' : ''
             }`}
           >
-            <span aria-hidden="true" className="h-1 w-1 flex-none rounded-full bg-gold" />
+            <span aria-hidden="true" className="h-1 w-1 flex-none rounded-full bg-sand" />
             <span className="font-body text-label font-medium uppercase text-ink-mid">{item}</span>
           </Reveal>
         ))}

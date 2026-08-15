@@ -21,13 +21,13 @@ export default function BookingCTA() {
 
       <div className="shell relative">
         <div className="max-w-4xl">
-          <Reveal variant="rule" className="h-px w-16 bg-gold" />
+          <Reveal variant="rule" className="h-px w-16 bg-sand" />
 
-          <Reveal as="h2" variant="mask" delay={0.08} className="mt-8 text-display-lg !text-cream">
+          <Reveal as="h2" variant="mask" delay={0.08} className="mt-8 text-display-lg !text-bone">
             <span>{t('cta.title')}</span>
           </Reveal>
 
-          <Reveal delay={0.18} className="mt-7 max-w-prose text-[1.02rem] leading-relaxed text-cream/60">
+          <Reveal delay={0.18} className="mt-7 max-w-prose text-[1.02rem] leading-relaxed text-bone/60">
             {t('cta.body')}
           </Reveal>
 

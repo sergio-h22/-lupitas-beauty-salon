@@ -65,7 +65,7 @@ export default function ServicesClient() {
                 <div key={group.id}>
                   {group.label && (
                     <Reveal className="mb-7 flex items-center gap-5">
-                      <h2 className="font-body text-label font-medium uppercase text-gold-text">
+                      <h2 className="font-body text-label font-medium uppercase text-sand-text">
                         {group.label}
                       </h2>
                       <span aria-hidden="true" className="h-px flex-1 bg-ink/10" />
@@ -103,7 +103,7 @@ function FilterButton({
       aria-pressed={active}
       className={`min-h-[44px] cursor-pointer border px-5 font-body text-label font-medium uppercase transition-colors duration-400 ease-luxe ${
         active
-          ? 'border-ink bg-ink text-cream'
+          ? 'border-ink bg-ink text-bone'
           : 'border-ink/15 text-ink-mid hover:border-ink hover:text-ink'
       }`}
     >

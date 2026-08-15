@@ -6,7 +6,7 @@ import Reveal from './Reveal';
 /**
  * The editorial section header.
  *
- * The previous version stamped an identical eyebrow + gold rule + centred
+ * The previous version stamped an identical eyebrow + sand rule + centred
  * heading onto seven consecutive sections, which is the strongest "template"
  * tell a page can have. This one is built to vary: a serial numeral turns the
  * page into a sequence, and `align` lets sections alternate between an
@@ -40,14 +40,14 @@ export default function SectionHeading({
         variant="lift"
       >
         {index && (
-          <span className={`serial ${light ? '!text-cream/40' : ''}`} aria-hidden="true">
+          <span className={`serial ${light ? '!text-bone/40' : ''}`} aria-hidden="true">
             {index}
           </span>
         )}
         {index && (
           <span
             aria-hidden="true"
-            className={`h-px w-8 ${light ? 'bg-cream/25' : 'bg-ink/20'}`}
+            className={`h-px w-8 ${light ? 'bg-bone/25' : 'bg-ink/20'}`}
           />
         )}
         <span className={light ? 'eyebrow-light' : 'eyebrow'}>{eyebrow}</span>
@@ -58,7 +58,7 @@ export default function SectionHeading({
         variant="mask"
         delay={0.08}
         className={`mt-7 ${size === 'lg' ? 'text-display-lg' : 'text-display-md'} ${
-          light ? '!text-cream' : ''
+          light ? '!text-bone' : ''
         }`}
       >
         <span>{title}</span>
@@ -69,7 +69,7 @@ export default function SectionHeading({
           delay={0.18}
           className={`mt-6 max-w-prose text-[0.98rem] leading-relaxed ${
             centered ? 'mx-auto' : ''
-          } ${light ? 'text-cream/60' : 'text-ink-muted'}`}
+          } ${light ? 'text-bone/60' : 'text-ink-muted'}`}
         >
           {subtitle}
         </Reveal>

@@ -1,5 +1,5 @@
 import type { Metadata } from 'next';
-import { Playfair_Display, Jost } from 'next/font/google';
+import { Bodoni_Moda, Jost, Italianno } from 'next/font/google';
 import './globals.css';
 import { LanguageProvider } from '@/lib/i18n';
 import Header from '@/components/Header';
@@ -9,15 +9,18 @@ import MobileCallBar from '@/components/MobileCallBar';
 import { BUSINESS, ADDRESS_LINE, HOURS } from '@/lib/business';
 
 /**
- * Five weights total, down from nine.
+ * Three faces, six weights, each with exactly one job.
  *
- * Playfair carries every heading at a single regular weight — a high-contrast
- * serif set large does not need bolding, and faux-bolding it is what makes a
- * display face look cheap. Jost (a geometric in the Futura lineage) replaces
- * Inter for UI and body: Inter is the default of every generated template, and
- * tracked-out uppercase is exactly where a geometric earns its keep.
+ * Bodoni Moda is a Didone — the fashion-plate serif, and the closest type
+ * relative of the stark JAESO lockup. It carries every heading at a single
+ * regular weight: a high-contrast serif set large does not need bolding, and
+ * faux-bolding it is what makes a display face look cheap. Jost (a geometric
+ * in the Futura lineage) takes UI and body, where tracked-out uppercase is
+ * exactly where a geometric earns its keep. Italianno appears in one place
+ * only — the signature in the wordmark — which is what keeps it a signature
+ * instead of a decoration.
  */
-const display = Playfair_Display({
+const display = Bodoni_Moda({
   subsets: ['latin'],
   weight: ['400', '500'],
   variable: '--font-display',
@@ -31,22 +34,29 @@ const body = Jost({
   display: 'swap',
 });
 
+const script = Italianno({
+  subsets: ['latin'],
+  weight: '400',
+  variable: '--font-script',
+  display: 'swap',
+});
+
 export const metadata: Metadata = {
   metadataBase: new URL(BUSINESS.siteUrl),
   title: {
-    default: "Lupita's Beauty Salon | Hair Salon in Anaheim, CA",
-    template: "%s | Lupita's Beauty Salon",
+    default: 'Jaeso Studio | Hair Studio in Anaheim, CA',
+    template: '%s | Jaeso Studio',
   },
   description:
-    "Lupita's Beauty Salon is a trusted hair and beauty studio in Anaheim, CA, minutes from Disneyland. Haircuts, color, highlights and balayage. Se habla español. Book online.",
+    'Jaeso Studio is a boutique hair studio in Anaheim, CA. Precision cutting, lived-in colour, balayage and blowouts, by appointment. Book online.',
   keywords: [
-    "Lupita's Beauty Salon Anaheim",
-    'hair salon Anaheim CA',
-    'beauty salon near Disneyland',
-    "women's haircut Anaheim",
+    'Jaeso Studio Anaheim',
+    'hair studio Anaheim CA',
+    'boutique hair salon Anaheim',
+    'balayage Anaheim',
     'hair color specialist Anaheim',
-    'Orange County beauty salon',
-    'salón de belleza Anaheim',
+    'Orange County hair studio',
+    'estudio de cabello Anaheim',
   ],
   alternates: { canonical: '/' },
   openGraph: {
@@ -55,14 +65,14 @@ export const metadata: Metadata = {
     alternateLocale: ['es_US'],
     url: BUSINESS.siteUrl,
     siteName: BUSINESS.name,
-    title: "Lupita's Beauty Salon | Hair Salon in Anaheim, CA",
+    title: 'Jaeso Studio | Hair Studio in Anaheim, CA',
     description:
-      'Personalized hair care and professional styling in Anaheim. Haircuts, color, highlights, balayage. Book online in under a minute.',
+      'Precision cutting and lived-in colour in Anaheim. Cuts, balayage, highlights and blowouts. Book online in under a minute.',
   },
   twitter: {
     card: 'summary_large_image',
-    title: "Lupita's Beauty Salon | Hair Salon in Anaheim, CA",
-    description: 'Personalized hair care and professional styling in Anaheim, CA. Book online.',
+    title: 'Jaeso Studio | Hair Studio in Anaheim, CA',
+    description: 'Precision cutting and lived-in colour in Anaheim, CA. Book online.',
   },
   robots: { index: true, follow: true },
 };
@@ -81,7 +91,7 @@ function schema() {
   return {
     '@context': 'https://schema.org',
     '@type': 'HairSalon',
-    '@id': `${BUSINESS.siteUrl}/#salon`,
+    '@id': `${BUSINESS.siteUrl}/#studio`,
     name: BUSINESS.name,
     description: BUSINESS.positioning.en,
     url: BUSINESS.siteUrl,
@@ -117,7 +127,7 @@ function schema() {
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
-    <html lang="en" className={`${display.variable} ${body.variable}`}>
+    <html lang="en" className={`${display.variable} ${body.variable} ${script.variable}`}>
       <head>
         {/* Scroll reveals start at opacity 0 and are switched on by an
             IntersectionObserver. Without JS that observer never runs, so the

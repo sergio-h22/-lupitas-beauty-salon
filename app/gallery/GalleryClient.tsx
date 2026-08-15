@@ -57,7 +57,7 @@ export default function GalleryClient() {
                 aria-pressed={filter === f.id}
                 className={`min-h-[44px] cursor-pointer border px-5 font-body text-label font-medium uppercase transition-colors duration-400 ease-luxe ${
                   filter === f.id
-                    ? 'border-ink bg-ink text-cream'
+                    ? 'border-ink bg-ink text-bone'
                     : 'border-ink/15 text-ink-mid hover:border-ink hover:text-ink'
                 }`}
               >
@@ -84,7 +84,7 @@ export default function GalleryClient() {
         </div>
       </section>
 
-      <section className="bg-cream-deep py-section">
+      <section className="bg-bone-deep py-section">
         <div className="shell">
           <SectionHeading
             index="02"

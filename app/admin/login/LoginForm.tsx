@@ -57,10 +57,10 @@ export default function LoginForm() {
   }
 
   return (
-    <div className="flex min-h-screen items-center justify-center bg-cream px-6">
+    <div className="flex min-h-screen items-center justify-center bg-bone px-6">
       <div className="w-full max-w-md">
         <div className="mb-12 text-center">
-          <h1 className="font-display text-3xl text-ink">Lupita's Beauty Salon</h1>
+          <h1 className="font-display text-3xl text-ink">Jaeso Studio</h1>
           <p className="mt-2 text-ink-muted">Owner Dashboard</p>
         </div>
 
@@ -74,7 +74,7 @@ export default function LoginForm() {
               type="email"
               value={email}
               onChange={(e) => setEmail(e.target.value)}
-              placeholder="owner@salon.com"
+              placeholder="owner@studio.com"
               required
               className="field-input"
               disabled={loading}
@@ -98,7 +98,7 @@ export default function LoginForm() {
           </div>
 
           {error && (
-            <div className="rounded border border-rose-text/30 bg-rose/10 p-3 text-sm font-medium text-rose-text">
+            <div className="rounded border border-alert-text/30 bg-alert/10 p-3 text-sm font-medium text-alert-text">
               {error}
             </div>
           )}
@@ -108,9 +108,9 @@ export default function LoginForm() {
           </button>
         </form>
 
-        <div className="mt-8 border border-gold/50 bg-cream-deep p-4 text-center text-xs text-ink-muted">
+        <div className="mt-8 border border-sand/50 bg-bone-deep p-4 text-center text-xs text-ink-muted">
           <p className="font-semibold text-ink">First time?</p>
-          <p className="mt-1">Contact the salon owner to create your admin account in Supabase.</p>
+          <p className="mt-1">Contact the studio owner to create your admin account in Supabase.</p>
         </div>
       </div>
     </div>

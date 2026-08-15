@@ -25,7 +25,7 @@ export default function BeforeAfter({
     <figure className="group">
       <div
         ref={wrap}
-        className="relative aspect-[4/3] w-full select-none overflow-hidden border border-ink/10 bg-cream-deep"
+        className="relative aspect-[4/3] w-full select-none overflow-hidden border border-ink/10 bg-bone-deep"
       >
         {/* After (full width, underneath) */}
         <Panel src={afterSrc} caption={t('gallery.after')} />
@@ -37,10 +37,10 @@ export default function BeforeAfter({
 
         <div
           aria-hidden="true"
-          className="pointer-events-none absolute inset-y-0 w-px bg-gold"
+          className="pointer-events-none absolute inset-y-0 w-px bg-sand"
           style={{ left: `${pos}%` }}
         >
-          <span className="absolute left-1/2 top-1/2 flex h-11 w-11 -translate-x-1/2 -translate-y-1/2 items-center justify-center rounded-full border border-gold bg-cream">
+          <span className="absolute left-1/2 top-1/2 flex h-11 w-11 -translate-x-1/2 -translate-y-1/2 items-center justify-center rounded-full border border-sand bg-bone">
             <svg
               viewBox="0 0 24 24"
               className="h-4 w-4 text-ink"
@@ -98,7 +98,7 @@ function Panel({
   return (
     <div
       className={`placeholder-tile h-full w-full gap-3 ${
-        tone === 'deep' ? 'bg-cream-warm' : 'bg-cream-deep'
+        tone === 'deep' ? 'bg-bone-warm' : 'bg-bone-deep'
       }`}
     >
       <span aria-hidden="true" className="absolute inset-3 border border-ink/10" />

@@ -1,26 +1,43 @@
+/**
+ * Single source of truth for everything the studio can change without a
+ * developer. Two categories live here and they are not the same:
+ *
+ *   Confirmed — name and city come from the studio's own profile.
+ *   PLACEHOLDER — phone, email, street, ZIP, geo and domain are stand-ins and
+ *   are marked as such below. The phone number is deliberately in the reserved
+ *   555-01xx range so it can never dial a real stranger if it ships by mistake.
+ *   Replace every line marked PLACEHOLDER before launch; nothing else in the
+ *   codebase hardcodes these values.
+ */
 export const BUSINESS = {
-  name: "Lupita's Beauty Salon",
+  name: 'Jaeso Studio',
   tagline: {
-    en: 'Beautiful Hair. Personalized Style. Confidence You Can Feel.',
-    es: 'Cabello Hermoso. Estilo Personalizado. Confianza Que Se Siente.',
+    en: 'Considered Cuts. Lived-In Colour. One Chair at a Time.',
+    es: 'Cortes Pensados. Color Que Se Vive. Una Silla a la Vez.',
   },
   positioning: {
-    en: "Anaheim's trusted beauty & hair studio providing personalized hair care and professional styling.",
-    es: 'El estudio de belleza y cabello de confianza en Anaheim, con cuidado capilar personalizado y peinado profesional.',
+    en: 'A boutique hair studio in Anaheim, California — precision cutting, lived-in colour and unhurried appointments by design.',
+    es: 'Un estudio de cabello boutique en Anaheim, California: cortes de precisión, color natural y citas sin prisa, por diseño.',
   },
-  phone: '(714) 418-8404',
-  phoneHref: '+17144188404',
-  email: 'hello@lupitasbeautysalon.com',
+  // PLACEHOLDER — reserved 555-01xx number. Replace with the studio's line.
+  phone: '(714) 555-0142',
+  phoneHref: '+17145550142',
+  // PLACEHOLDER — replace with the studio's real inbox.
+  email: 'hello@jaesostudio.com',
   address: {
-    street: '700 W Orangewood Ave',
+    // PLACEHOLDER — replace with the studio's street address.
+    street: '000 Placeholder Ave, Suite 000',
     city: 'Anaheim',
     state: 'CA',
-    zip: '92802',
+    // PLACEHOLDER — replace with the studio's ZIP.
+    zip: '92805',
     country: 'US',
   },
-  // Approximate — replace with the exact pin from your Google Business Profile.
-  geo: { lat: 33.7896, lng: -117.9298 },
-  siteUrl: 'https://lupitasbeautysalon.com',
+  // PLACEHOLDER — city centroid. Replace with the exact pin from the
+  // studio's Google Business Profile, or the map link will land down the road.
+  geo: { lat: 33.8353, lng: -117.9145 },
+  // PLACEHOLDER — replace with the live domain before launch.
+  siteUrl: 'https://jaesostudio.com',
   social: {
     instagram: '',
     facebook: '',
@@ -43,15 +60,21 @@ export const ADDRESS_LINE = `${BUSINESS.address.street}, ${BUSINESS.address.city
 
 export const MAPS_QUERY = encodeURIComponent(`${BUSINESS.name}, ${ADDRESS_LINE}`);
 
-/** day: 0 = Sunday. `null` means closed. Times are 24h local. */
+/**
+ * PLACEHOLDER SCHEDULE — day: 0 = Sunday. `null` means closed, and the
+ * booking flow reads it directly, so a wrong line here sells appointments on
+ * a day the studio is shut. Confirm all seven before launch.
+ *
+ * Times are 24h local.
+ */
 export const HOURS: { day: number; open: string | null; close: string | null }[] = [
-  { day: 1, open: '10:00', close: '19:00' },
-  { day: 2, open: null, close: null },
+  { day: 1, open: null, close: null },
+  { day: 2, open: '10:00', close: '19:00' },
   { day: 3, open: '10:00', close: '19:00' },
-  { day: 4, open: '10:00', close: '19:00' },
-  { day: 5, open: '10:00', close: '19:00' },
-  { day: 6, open: '10:00', close: '19:00' },
-  { day: 0, open: '10:00', close: '19:00' },
+  { day: 4, open: '10:00', close: '20:00' },
+  { day: 5, open: '10:00', close: '20:00' },
+  { day: 6, open: '09:00', close: '17:00' },
+  { day: 0, open: null, close: null },
 ];
 
 export const DAY_ORDER = [1, 2, 3, 4, 5, 6, 0];

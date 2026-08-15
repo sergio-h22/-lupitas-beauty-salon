@@ -54,8 +54,9 @@ export default function Hero() {
     return () => io.disconnect();
   }, [hasVideo]);
 
-  // Each sentence of the tagline becomes its own typeset line, with the stop
-  // set in gold — one of the few places the accent is allowed to appear.
+  // Each sentence of the tagline becomes its own typeset line, with the full
+  // stop set in sand. In a palette with no accent colour, the punctuation is
+  // the only warmth on the screen — which is precisely why it registers.
   const lines = BUSINESS.tagline[lang]
     .split(/\.\s*/)
     .map((s) => s.trim())
@@ -67,15 +68,15 @@ export default function Hero() {
       className="relative flex min-h-[100svh] flex-col justify-end overflow-hidden bg-ink pb-[clamp(3rem,8vh,6rem)] pt-[calc(var(--header-h)+5rem)]"
       /* The header is sticky, so it sits *in* the flow and reserves its own
          height. Pulling the hero up by exactly that height is what lets the bar
-         float transparently over the dark ground instead of over the cream
-         body — without it the inverted logo and nav render cream-on-cream and
+         float transparently over the dark ground instead of over the bone
+         body — without it the inverted logo and nav render bone-on-bone and
          are effectively invisible. */
       style={{ marginTop: 'calc(var(--header-h) * -1)' }}
     >
       {/* Ground: always painted, so there is never a blank frame or a shift. */}
       <div
         aria-hidden="true"
-        className="absolute inset-0 bg-[radial-gradient(125%_95%_at_72%_12%,#2A2621_0%,#0E0D0C_62%)]"
+        className="absolute inset-0 bg-[radial-gradient(125%_95%_at_72%_12%,#22211F_0%,#0A0A0A_62%)]"
       />
 
       {showVideo && hasVideo && (
@@ -106,26 +107,26 @@ export default function Hero() {
           a large empty field. */}
       <div className="shell absolute inset-x-0 top-[calc(var(--header-h)+1.75rem)] z-10 flex items-center justify-between gap-4">
         <Reveal className="flex items-center gap-4">
-          <span className="hidden h-px w-10 bg-gold/50 sm:block" aria-hidden="true" />
-          <span className="font-body text-label font-medium uppercase text-cream/55">
+          <span className="hidden h-px w-10 bg-sand/50 sm:block" aria-hidden="true" />
+          <span className="font-body text-label font-medium uppercase text-bone/55">
             <span className="hidden sm:inline">{BUSINESS.name} — </span>
             {BUSINESS.address.city}, {BUSINESS.address.state}
           </span>
         </Reveal>
         <Reveal delay={0.1} className="hidden flex-none md:block">
-          <span className="font-body text-label font-medium uppercase text-gold-soft">
-            {t('welcome.seHabla')}
+          <span className="font-body text-label font-medium uppercase text-sand-soft">
+            {t('welcome.appointment')}
           </span>
         </Reveal>
       </div>
 
       <div className="shell relative z-10">
-        <h1 className="max-w-[16ch] text-[clamp(2.15rem,6.4vw,5.25rem)] font-normal leading-[1.02] tracking-[-0.03em] !text-cream">
+        <h1 className="max-w-[16ch] text-[clamp(2.15rem,6.4vw,5.25rem)] font-normal leading-[1.02] tracking-[-0.03em] !text-bone">
           {lines.map((line, i) => (
             <Reveal key={line} as="span" variant="mask" delay={0.06 + i * 0.09} className="block">
               <span className="block">
                 {line}
-                <span className="text-gold">.</span>
+                <span className="text-sand">.</span>
               </span>
             </Reveal>
           ))}
@@ -133,7 +134,7 @@ export default function Hero() {
 
         <div className="mt-10 flex flex-col gap-9 lg:mt-14 lg:flex-row lg:items-end lg:justify-between lg:gap-16">
           <Reveal delay={0.34} className="max-w-measure">
-            <p className="text-[0.98rem] leading-relaxed text-cream/60">
+            <p className="text-[0.98rem] leading-relaxed text-bone/60">
               {BUSINESS.positioning[lang]}
             </p>
           </Reveal>
@@ -153,16 +154,16 @@ export default function Hero() {
           </Reveal>
         </div>
 
-        <Reveal delay={0.5} className="mt-12 flex items-center justify-between border-t border-cream/12 pt-6">
+        <Reveal delay={0.5} className="mt-12 flex items-center justify-between border-t border-bone/12 pt-6">
           <a
             href={`tel:${BUSINESS.phoneHref}`}
-            className="font-body text-label-lg font-medium uppercase text-cream/70 transition-colors duration-400 ease-luxe hover:text-gold-soft"
+            className="font-body text-label-lg font-medium uppercase text-bone/70 transition-colors duration-400 ease-luxe hover:text-sand-soft"
           >
             {BUSINESS.phone}
           </a>
           <span
             aria-hidden="true"
-            className="hidden items-center gap-3 font-body text-label font-medium uppercase text-cream/50 sm:flex"
+            className="hidden items-center gap-3 font-body text-label font-medium uppercase text-bone/50 sm:flex"
           >
             {t('hero.scroll')}
             <ScrollCue />
@@ -175,8 +176,8 @@ export default function Hero() {
 
 function ScrollCue() {
   return (
-    <span className="relative block h-8 w-px overflow-hidden bg-cream/20">
-      <span className="absolute inset-x-0 top-0 h-3 animate-[scroll-cue_2.2s_cubic-bezier(0.22,1,0.36,1)_infinite] bg-gold" />
+    <span className="relative block h-8 w-px overflow-hidden bg-bone/20">
+      <span className="absolute inset-x-0 top-0 h-3 animate-[scroll-cue_2.2s_cubic-bezier(0.22,1,0.36,1)_infinite] bg-sand" />
       <style>{`@keyframes scroll-cue{0%{transform:translateY(-100%)}60%,100%{transform:translateY(800%)}}`}</style>
     </span>
   );

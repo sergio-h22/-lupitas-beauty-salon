@@ -16,10 +16,10 @@ export default function PageHeader({
   subtitle?: string;
 }) {
   return (
-    <section className="border-b border-ink/10 bg-cream-deep pb-section-sm pt-[clamp(4rem,10vw,7rem)]">
+    <section className="border-b border-ink/10 bg-bone-deep pb-section-sm pt-[clamp(4rem,10vw,7rem)]">
       <div className="shell">
         <Reveal className="flex items-center gap-4">
-          <span aria-hidden="true" className="h-px w-10 bg-gold" />
+          <span aria-hidden="true" className="h-px w-10 bg-sand" />
           <span className="eyebrow">{eyebrow}</span>
         </Reveal>
 

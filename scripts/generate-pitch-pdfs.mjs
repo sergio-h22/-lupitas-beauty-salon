@@ -20,12 +20,12 @@ async function generatePDF() {
 
     const files = [
       {
-        name: 'beauty-salon-pitch-en.html',
-        output: 'lupitas-beauty-salon-pitch-en.pdf',
+        name: 'jaeso-studio-pitch-en.html',
+        output: 'jaeso-studio-pitch-en.pdf',
       },
       {
-        name: 'beauty-salon-pitch-es.html',
-        output: 'lupitas-beauty-salon-pitch-es.pdf',
+        name: 'jaeso-studio-pitch-es.html',
+        output: 'jaeso-studio-pitch-es.pdf',
       },
     ];
 

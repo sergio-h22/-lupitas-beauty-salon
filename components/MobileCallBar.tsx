@@ -6,7 +6,7 @@ import { useT } from '@/lib/i18n';
 import { BUSINESS } from '@/lib/business';
 
 /**
- * Phones are how a local salon actually gets booked, and the number is
+ * Phones are how a local studio actually gets booked, and the number is
  * otherwise below the fold on mobile. Hidden on the booking page, where it
  * would compete with the flow's own controls.
  */
@@ -17,7 +17,7 @@ export default function MobileCallBar() {
   if (pathname === '/book' || pathname.startsWith('/admin')) return null;
 
   return (
-    <div className="fixed inset-x-0 bottom-0 z-40 grid grid-cols-2 border-t border-ink/10 bg-cream/95 pb-[env(safe-area-inset-bottom)] backdrop-blur-md md:hidden">
+    <div className="fixed inset-x-0 bottom-0 z-40 grid grid-cols-2 border-t border-ink/10 bg-bone/95 pb-[env(safe-area-inset-bottom)] backdrop-blur-md md:hidden">
       <a
         href={`tel:${BUSINESS.phoneHref}`}
         className="flex min-h-[56px] items-center justify-center gap-2.5 font-body text-label font-medium uppercase text-ink"
@@ -27,7 +27,7 @@ export default function MobileCallBar() {
       </a>
       <Link
         href="/book"
-        className="flex min-h-[56px] items-center justify-center bg-ink font-body text-label font-medium uppercase text-cream"
+        className="flex min-h-[56px] items-center justify-center bg-ink font-body text-label font-medium uppercase text-bone"
       >
         {t('nav.book')}
       </Link>

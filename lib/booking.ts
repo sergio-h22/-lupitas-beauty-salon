@@ -5,7 +5,7 @@ export type Appointment = {
   id: string;
   serviceId: string;
   specialistId: string;
-  /** YYYY-MM-DD in salon-local time. */
+  /** YYYY-MM-DD in studio-local time. */
   date: string;
   /** HH:MM 24h. */
   time: string;

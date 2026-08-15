@@ -1,14 +1,20 @@
 import type { Config } from 'tailwindcss';
 
 /**
- * "Editorial Atelier" design system.
+ * "Signature Monochrome" design system — Jaeso Studio.
  *
- * Two rules govern every token here:
- *  1. Gold is punctuation, not paint. It appears on dark ground, on hairlines
- *     and on a handful of numerals — never as body text on cream, where it
- *     measures 1.95:1 and fails WCAG outright. `gold.text` is the compliant
- *     substitute (5.61:1).
- *  2. Scale carries the luxury, not ornament. The display sizes below are
+ * The identity is a black disc, a bone card and a hand-drawn signature. There
+ * is no third colour in it, so there is no third colour here either. Three
+ * rules govern every token below:
+ *
+ *  1. The palette is ink, bone and one warm neutral. Where a gilded salon
+ *     brand would punctuate with gold, this one punctuates with contrast —
+ *     bone on near-black, a hairline, a signature set in script. Sand is a
+ *     quiet warm grey, not an accent colour; at 2.03:1 on bone it is never
+ *     allowed to carry text. `sand.text` is the compliant substitute (5.32:1).
+ *  2. Red belongs to errors alone. `alert` is a system colour, never a brand
+ *     one — nothing decorative is ever tinted with it.
+ *  3. Scale carries the luxury, not ornament. The display sizes below are
  *     deliberately far apart so a page reads as composed rather than filled.
  */
 const config: Config = {
@@ -16,44 +22,52 @@ const config: Config = {
   theme: {
     extend: {
       colors: {
+        /** Near-black rather than pure #000 — it holds the Bodoni hairlines. */
         ink: {
-          DEFAULT: '#0E0D0C',
-          soft: '#221F1B',
-          // 8.99:1 on cream.
-          mid: '#4A443C',
-          // 6.17:1 on cream.
-          muted: '#635C52',
+          DEFAULT: '#0A0A0A',
+          soft: '#1C1B1A',
+          // 9.33:1 on bone.
+          mid: '#443F38',
+          // 6.38:1 on bone.
+          muted: '#5E574C',
           /**
            * The lightest tone allowed to carry real text — service durations,
            * prices, captions and serial numerals all use it at ~10px. Measured
-           * 5.17:1 on cream and 4.66:1 on cream-deep, so it clears AA on both
+           * 5.31:1 on bone and 4.73:1 on bone-deep, so it clears AA on both
            * grounds. A lighter grey looked better and failed: #948C81 measures
-           * 3.10:1 on cream, which is unreadable at this size.
+           * 2.90:1 on bone, which is unreadable at this size.
            */
-          faint: '#6F6859',
+          faint: '#6B6355',
         },
-        cream: {
-          DEFAULT: '#FAF7F1',
-          deep: '#F1EBE0',
-          warm: '#E8E0D1',
+        /** The card ground of the brand's booking tile — warm, not white. */
+        bone: {
+          DEFAULT: '#F5F2EC',
+          deep: '#EAE5DC',
+          warm: '#DDD6C9',
         },
-        gold: {
-          DEFAULT: '#C9A227',
-          soft: '#E0C877',
-          // Text-safe on cream (5.61:1). Champagne gold itself fails at 1.95:1.
-          text: '#7A5F18',
-          deep: '#A67C1A',
+        sand: {
+          DEFAULT: '#B9AA96',
+          // 12.61:1 on ink — the only sand tone cleared for text, and only there.
+          soft: '#D8CDBC',
+          // Text-safe on bone (5.32:1). Sand itself fails at 2.03:1.
+          text: '#6E6252',
+          deep: '#8C7D69',
         },
-        rose: {
-          DEFAULT: '#D8A7A7',
-          // Text-safe on cream (5.66:1).
-          text: '#8C5252',
+        /** System-only. Fills and hairlines use DEFAULT; text uses the pair below. */
+        alert: {
+          DEFAULT: '#C0463C',
+          // 10.01:1 on ink — for closed-day markers in the inverted footer.
+          soft: '#E8A9A0',
+          // 7.24:1 on bone.
+          text: '#94291F',
         },
       },
 
       fontFamily: {
-        display: ['var(--font-display)', 'Georgia', 'serif'],
+        display: ['var(--font-display)', 'Didot', 'Georgia', 'serif'],
         body: ['var(--font-body)', 'system-ui', 'sans-serif'],
+        /** Reserved for the wordmark and its echoes. Never for running text. */
+        script: ['var(--font-script)', 'Snell Roundhand', 'cursive'],
       },
 
       /**

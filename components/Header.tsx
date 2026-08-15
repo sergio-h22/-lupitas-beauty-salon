@@ -56,7 +56,7 @@ export default function Header() {
         className={`sticky top-0 z-50 border-b transition-[background-color,border-color] duration-600 ease-luxe ${
           overHero
             ? 'border-transparent bg-transparent'
-            : 'border-ink/10 bg-cream/90 backdrop-blur-md'
+            : 'border-ink/10 bg-bone/90 backdrop-blur-md'
         }`}
       >
         <div className="shell flex h-[var(--header-h)] items-center justify-between gap-6">
@@ -77,13 +77,13 @@ export default function Header() {
                   href={l.href}
                   aria-current={active ? 'page' : undefined}
                   className={`group relative py-2 font-body text-label font-medium uppercase transition-colors duration-400 ease-luxe ${
-                    overHero ? 'text-cream/75 hover:text-cream' : 'text-ink-mid hover:text-ink'
-                  } ${active ? (overHero ? '!text-cream' : '!text-ink') : ''}`}
+                    overHero ? 'text-bone/75 hover:text-bone' : 'text-ink-mid hover:text-ink'
+                  } ${active ? (overHero ? '!text-bone' : '!text-ink') : ''}`}
                 >
                   {l.label}
                   <span
                     aria-hidden="true"
-                    className={`absolute -bottom-0.5 left-0 h-px w-full origin-right bg-gold transition-transform duration-600 ease-luxe group-hover:origin-left group-hover:scale-x-100 ${
+                    className={`absolute -bottom-0.5 left-0 h-px w-full origin-right bg-sand transition-transform duration-600 ease-luxe group-hover:origin-left group-hover:scale-x-100 ${
                       active ? 'scale-x-100' : 'scale-x-0'
                     }`}
                   />
@@ -98,7 +98,7 @@ export default function Header() {
             <a
               href={`tel:${BUSINESS.phoneHref}`}
               className={`hidden min-h-[44px] items-center font-body text-label font-medium uppercase transition-colors duration-400 ease-luxe xl:inline-flex ${
-                overHero ? 'text-cream/75 hover:text-cream' : 'text-ink-mid hover:text-ink'
+                overHero ? 'text-bone/75 hover:text-bone' : 'text-ink-mid hover:text-ink'
               }`}
             >
               {BUSINESS.phone}
@@ -117,7 +117,7 @@ export default function Header() {
               aria-expanded={open}
               aria-controls="mobile-nav"
               className={`-mr-2 inline-flex h-11 w-11 cursor-pointer items-center justify-center transition-colors duration-400 ease-luxe lg:hidden ${
-                open ? 'text-cream' : overHero ? 'text-cream' : 'text-ink'
+                open ? 'text-bone' : overHero ? 'text-bone' : 'text-ink'
               }`}
             >
               <span className="sr-only">{open ? t('nav.close') : t('nav.menu')}</span>
@@ -147,12 +147,12 @@ export default function Header() {
                 href={l.href}
                 tabIndex={open ? 0 : -1}
                 style={{ transitionDelay: open ? `${120 + i * 60}ms` : '0ms' }}
-                className={`border-b border-cream/10 py-5 font-display text-[clamp(1.7rem,7vw,2.4rem)] text-cream transition-[opacity,transform] duration-600 ease-luxe ${
+                className={`border-b border-bone/10 py-5 font-display text-[clamp(1.7rem,7vw,2.4rem)] text-bone transition-[opacity,transform] duration-600 ease-luxe ${
                   open ? 'translate-y-0 opacity-100' : 'translate-y-4 opacity-0'
                 }`}
               >
                 <span className="flex items-baseline gap-4">
-                  <span className="serial !text-cream/30" aria-hidden="true">
+                  <span className="serial !text-bone/30" aria-hidden="true">
                     {String(i + 1).padStart(2, '0')}
                   </span>
                   {l.label}
@@ -177,8 +177,8 @@ export default function Header() {
             >
               {BUSINESS.phone}
             </a>
-            <p className="mt-2 text-center font-body text-label font-medium uppercase text-gold-soft">
-              {t('welcome.seHabla')}
+            <p className="mt-2 text-center font-body text-label font-medium uppercase text-sand-soft">
+              {t('welcome.appointment')}
             </p>
           </div>
         </div>
@@ -203,7 +203,7 @@ function LangToggle({
       role="group"
       aria-label={label}
       className={`flex h-10 items-center border font-body text-[0.62rem] font-medium uppercase tracking-[0.14em] transition-colors duration-600 ease-luxe ${
-        light ? 'border-cream/25' : 'border-ink/15'
+        light ? 'border-bone/25' : 'border-ink/15'
       }`}
     >
       {(['en', 'es'] as const).map((code) => {
@@ -217,10 +217,10 @@ function LangToggle({
             className={`h-full min-w-[36px] cursor-pointer px-2 transition-colors duration-400 ease-luxe ${
               on
                 ? light
-                  ? 'bg-cream text-ink'
-                  : 'bg-ink text-cream'
+                  ? 'bg-bone text-ink'
+                  : 'bg-ink text-bone'
                 : light
-                  ? 'text-cream/60 hover:text-cream'
+                  ? 'text-bone/60 hover:text-bone'
                   : 'text-ink-muted hover:text-ink'
             }`}
           >

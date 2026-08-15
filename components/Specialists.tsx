@@ -33,7 +33,7 @@ export default function Specialists({ index }: { index?: string }) {
                 </span>
               </div>
 
-              <p className="mt-2 font-body text-label font-medium uppercase text-gold-text">
+              <p className="mt-2 font-body text-label font-medium uppercase text-sand-text">
                 {L(s.role)}
               </p>
               <p className="mt-4 max-w-prose text-sm leading-relaxed text-ink-muted">{L(s.bio)}</p>

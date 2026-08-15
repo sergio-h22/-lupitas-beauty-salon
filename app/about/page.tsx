@@ -4,7 +4,7 @@ import AboutClient from './AboutClient';
 export const metadata: Metadata = {
   title: 'About the Salon',
   description:
-    "Lupita's Beauty Salon is dedicated to helping every customer feel confident and beautiful through personalized hair care and professional styling in Anaheim, CA.",
+    'Jaeso Studio is a boutique hair studio in Anaheim, CA — precision cutting, lived-in colour and unhurried appointments, one guest at a time.',
   alternates: { canonical: '/about' },
 };
 

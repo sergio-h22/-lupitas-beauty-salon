@@ -35,7 +35,7 @@ export default function ServiceIndex({
             aria-label={`${t('services.book')} — ${L(s.name)}`}
             className="relative -mx-gutter grid grid-cols-[auto_1fr_auto] items-baseline gap-x-5 gap-y-3
                        px-gutter py-8 transition-colors duration-400 ease-luxe
-                       hover:bg-cream-deep/70 md:grid-cols-[3.5rem_minmax(0,1fr)_7rem_10rem_2rem] md:gap-x-8 md:py-10"
+                       hover:bg-bone-deep/70 md:grid-cols-[3.5rem_minmax(0,1fr)_7rem_10rem_2rem] md:gap-x-8 md:py-10"
           >
             <span className="serial pt-1 md:pt-2" aria-hidden="true">
               {String(startIndex + i).padStart(2, '0')}
@@ -47,7 +47,7 @@ export default function ServiceIndex({
                   {L(s.name)}
                 </h3>
                 {s.popular && (
-                  <span className="font-body text-label font-medium uppercase text-gold-text">
+                  <span className="font-body text-label font-medium uppercase text-sand-text">
                     · {t('services.popular')}
                   </span>
                 )}
@@ -76,7 +76,7 @@ export default function ServiceIndex({
             <span
               aria-hidden="true"
               className="justify-self-end pt-1 text-ink-faint transition-[transform,color] duration-600 ease-luxe
-                         group-hover:translate-x-1 group-hover:text-gold-text md:pt-2"
+                         group-hover:translate-x-1 group-hover:text-sand-text md:pt-2"
             >
               <Arrow />
             </span>

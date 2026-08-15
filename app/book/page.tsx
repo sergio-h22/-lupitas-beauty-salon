@@ -7,7 +7,7 @@ import BookingHeader from './BookingHeader';
 export const metadata: Metadata = {
   title: 'Book an Appointment',
   description:
-    "Book a haircut, color, highlights or balayage at Lupita's Beauty Salon in Anaheim, CA. No account needed — takes about a minute.",
+    'Book a haircut, colour, highlights or balayage at Jaeso Studio in Anaheim, CA. No account needed — takes about a minute.',
   alternates: { canonical: '/book' },
 };
 

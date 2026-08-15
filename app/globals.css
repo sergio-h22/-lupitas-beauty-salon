@@ -14,7 +14,7 @@
   }
 
   body {
-    @apply bg-cream font-body text-ink-muted antialiased;
+    @apply bg-bone font-body text-ink-muted antialiased;
     font-size: 1rem;
     font-weight: 400;
     line-height: 1.7;
@@ -38,15 +38,17 @@
     text-wrap: balance;
   }
 
-  /* Playfair needs optical tightening once it passes ~2rem; without this the
-     display sizes read airy and unresolved rather than composed. */
+  /* Bodoni is a Didone: its hairlines thin as it scales, so the display sizes
+     need optical tightening or they read airy and unresolved rather than
+     composed. Below ~1.5rem the same face needs the opposite treatment, which
+     is why body copy is never set in it. */
   h1,
   h2 {
-    letter-spacing: -0.02em;
+    letter-spacing: -0.022em;
   }
 
   :focus-visible {
-    outline: 2px solid theme('colors.gold.text');
+    outline: 2px solid theme('colors.ink.DEFAULT');
     outline-offset: 3px;
     border-radius: 1px;
   }
@@ -58,7 +60,7 @@
   }
 
   ::selection {
-    @apply bg-ink text-cream;
+    @apply bg-ink text-bone;
   }
 }
 
@@ -75,12 +77,21 @@
 
   /* ---- Editorial labels ------------------------------------------------ */
 
+  /* Tracked-out uppercase at full ink — the same lockup as the STUDIO line
+     under the mark. A tinted eyebrow is how a gilded brand labels a section;
+     this one labels with contrast, and lets the hairline carry the warmth. */
   .eyebrow {
-    @apply font-body text-label font-medium uppercase text-gold-text;
+    @apply font-body text-label font-medium uppercase text-ink;
   }
 
   .eyebrow-light {
-    @apply font-body text-label font-medium uppercase text-gold-soft;
+    @apply font-body text-label font-medium uppercase text-bone;
+  }
+
+  /* The signature, reused. Set the studio name in it and nothing else — a
+     script that appears twice on a page stops reading as a signature. */
+  .signature {
+    @apply font-script leading-none;
   }
 
   /* Serial numerals. The single strongest art-direction signal on the page —
@@ -89,8 +100,8 @@
     @apply font-body text-label font-medium tabular-nums text-ink-faint;
   }
 
-  .rule-gold {
-    @apply h-px w-14 origin-left bg-gold;
+  .rule-sand {
+    @apply h-px w-14 origin-left bg-sand;
   }
 
   .rule-hair {
@@ -108,32 +119,33 @@
   }
 
   .btn-primary {
-    @apply btn bg-ink text-cream hover:-translate-y-0.5 hover:bg-ink-soft;
+    @apply btn bg-ink text-bone hover:-translate-y-0.5 hover:bg-ink-soft;
   }
 
   .btn-outline {
-    @apply btn border border-ink/20 text-ink hover:-translate-y-0.5 hover:border-ink hover:bg-ink hover:text-cream;
+    @apply btn border border-ink/20 text-ink hover:-translate-y-0.5 hover:border-ink hover:bg-ink hover:text-bone;
   }
 
-  /* On near-black ground, a bone fill reads far more expensive than a gold
-     one — and it keeps gold rare enough to still mean something. */
+  /* Bone on near-black, resolving to sand on hover. The hover is the only
+     colour change in the button set, which is what keeps it legible as a
+     state rather than as decoration. */
   .btn-ondark {
-    @apply btn bg-cream text-ink hover:-translate-y-0.5 hover:bg-gold-soft;
+    @apply btn bg-bone text-ink hover:-translate-y-0.5 hover:bg-sand-soft;
   }
 
   .btn-ondark-outline {
-    @apply btn border border-cream/30 text-cream hover:-translate-y-0.5 hover:border-cream hover:bg-cream hover:text-ink;
+    @apply btn border border-bone/30 text-bone hover:-translate-y-0.5 hover:border-bone hover:bg-bone hover:text-ink;
   }
 
   /* Bare text with a rule that draws in on hover. */
   .btn-quiet {
     @apply relative inline-flex min-h-[44px] items-center font-body text-label-lg font-medium
-           uppercase text-ink transition-colors duration-400 ease-luxe hover:text-gold-text;
+           uppercase text-ink transition-colors duration-400 ease-luxe hover:text-sand-text;
   }
 
   .btn-quiet::after {
     content: '';
-    @apply absolute bottom-2 left-0 h-px w-full origin-right scale-x-0 bg-gold
+    @apply absolute bottom-2 left-0 h-px w-full origin-right scale-x-0 bg-sand
            transition-transform duration-600 ease-luxe;
   }
 
@@ -149,11 +161,14 @@
            hover:-translate-y-1 hover:border-ink/25;
   }
 
-  /* Photography treatment: slightly desaturated at rest so real photos sit in
-     the palette rather than fighting it, resolving to full colour on hover. */
+  /* Photography treatment. The brand's own cover image is a near-monochrome
+     portrait, so the grid holds photographs at 25% saturation and lets them
+     resolve to full colour only on hover — the page reads as one black-and-
+     white spread until a client reaches for a specific look. Hair colour work
+     is the whole product, so the colour has to be reachable, not removed. */
   .img-editorial {
     @apply h-full w-full object-cover;
-    filter: saturate(0.9) contrast(1.02);
+    filter: saturate(0.25) contrast(1.06);
     transition:
       transform 900ms cubic-bezier(0.22, 1, 0.36, 1),
       filter 900ms cubic-bezier(0.22, 1, 0.36, 1);
@@ -165,7 +180,7 @@
   }
 
   .frame {
-    @apply relative overflow-hidden bg-cream-deep;
+    @apply relative overflow-hidden bg-bone-deep;
   }
 
   /* ---- Forms ------------------------------------------------------------ */
@@ -177,11 +192,11 @@
   .field-input {
     @apply w-full min-h-[52px] border border-ink/15 bg-white px-4 py-3 font-body text-base text-ink
            transition-colors duration-250 placeholder:text-ink-faint
-           focus:border-gold-text focus:outline-none focus:ring-1 focus:ring-gold-text/30;
+           focus:border-ink focus:outline-none focus:ring-1 focus:ring-ink/25;
   }
 
   .placeholder-tile {
-    @apply relative flex flex-col items-center justify-center overflow-hidden bg-cream-deep text-center;
+    @apply relative flex flex-col items-center justify-center overflow-hidden bg-bone-deep text-center;
   }
 }
 

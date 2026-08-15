@@ -4,9 +4,11 @@ import { useT } from '@/lib/i18n';
 import Reveal from './Reveal';
 
 /**
- * The three offers, set as a numbered band rather than three gold-bordered
- * boxes. Gold outlines around every panel is exactly the treatment that makes
- * an accent stop reading as an accent.
+ * The three offers, set as a numbered band rather than three outlined boxes.
+ * A promo strip is where a monochrome palette usually breaks — the temptation
+ * is to reach for a colour so the offers "pop", and the moment they do, the
+ * page has a fourth value in it and stops being the brand. These are typeset
+ * instead: same ink, same hairlines, hierarchy from scale alone.
  */
 export default function Promos({ index }: { index?: string }) {
   const t = useT();
@@ -18,7 +20,7 @@ export default function Promos({ index }: { index?: string }) {
   ];
 
   return (
-    <section className="bg-cream-deep py-section-sm">
+    <section className="bg-bone-deep py-section-sm">
       <div className="shell">
         <Reveal className="flex items-center gap-4">
           {index && (

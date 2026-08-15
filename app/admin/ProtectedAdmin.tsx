@@ -83,7 +83,7 @@ export default function ProtectedAdmin() {
   if (state === 'unconfigured') {
     return (
       <div className="shell py-section">
-        <div className="max-w-prose border border-rose-text/30 bg-rose/10 p-8">
+        <div className="max-w-prose border border-alert-text/30 bg-alert/10 p-8">
           <h1 className="text-display-sm">Authentication is not configured</h1>
           <p className="mt-4 text-sm leading-relaxed text-ink-muted">
             This dashboard is unprotected until Supabase keys are set. Add{' '}

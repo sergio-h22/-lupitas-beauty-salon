@@ -23,19 +23,19 @@ const DICT = {
   /** Short-form versions of facts already stated elsewhere on the page, cut
    *  down to fit the trust band that sits directly beneath the hero. */
   trust: {
-    seHabla: { en: 'Se habla español', es: 'Se habla español' },
-    parking: { en: 'Free parking on site', es: 'Estacionamiento gratuito' },
-    disney: { en: 'Five minutes from Disneyland', es: 'A cinco minutos de Disneyland' },
+    appointment: { en: 'By appointment only', es: 'Solo con cita previa' },
+    oneChair: { en: 'One guest at a time', es: 'Una clienta a la vez' },
+    consult: { en: 'Every visit starts with a consultation', es: 'Cada visita empieza con una consulta' },
     quickBook: { en: 'Book online in a minute', es: 'Reserva en línea en un minuto' },
   },
   welcome: {
     eyebrow: { en: 'Welcome', es: 'Bienvenida' },
-    title: { en: 'Personalized hair care in the heart of Anaheim', es: 'Cuidado capilar personalizado en el corazón de Anaheim' },
+    title: { en: 'A studio built around one chair at a time', es: 'Un estudio construido alrededor de una silla a la vez' },
     body: {
-      en: 'Lupita’s Beauty Salon is dedicated to helping every customer feel confident and beautiful through personalized hair care and professional styling. We take the time to understand your hair before we ever pick up the scissors.',
-      es: 'Lupita’s Beauty Salon se dedica a que cada cliente se sienta segura y hermosa mediante cuidado capilar personalizado y peinado profesional. Nos tomamos el tiempo de entender tu cabello antes de tomar las tijeras.',
+      en: 'Jaeso Studio is a boutique hair studio in Anaheim. We book one guest at a time, which means the room is yours, the pace is yours, and nobody is being finished off in the next chair. We take the time to understand your hair before we ever pick up the scissors.',
+      es: 'Jaeso Studio es un estudio de cabello boutique en Anaheim. Atendemos a una clienta a la vez: el espacio es tuyo, el ritmo es tuyo y nadie está siendo terminado a toda prisa en la silla de al lado. Nos tomamos el tiempo de entender tu cabello antes de tomar las tijeras.',
     },
-    seHabla: { en: 'Se habla español', es: 'Se habla español' },
+    appointment: { en: 'By appointment', es: 'Con cita previa' },
   },
   services: {
     eyebrow: { en: 'Services', es: 'Servicios' },
@@ -69,7 +69,7 @@ const DICT = {
   },
   team: {
     eyebrow: { en: 'Our Team', es: 'Nuestro Equipo' },
-    title: { en: 'Meet our specialists', es: 'Conoce a nuestras especialistas' },
+    title: { en: 'Meet the stylists', es: 'Conoce a las estilistas' },
     bookWith: { en: 'Book with', es: 'Reservar con' },
   },
   reviews: {
@@ -82,7 +82,7 @@ const DICT = {
   },
   location: {
     eyebrow: { en: 'Visit Us', es: 'Visítanos' },
-    title: { en: 'Find the salon', es: 'Encuentra el salón' },
+    title: { en: 'Find the studio', es: 'Encuentra el estudio' },
     hours: { en: 'Hours', es: 'Horario' },
     closed: { en: 'Closed', es: 'Cerrado' },
     openNow: { en: 'Open now', es: 'Abierto ahora' },
@@ -90,8 +90,8 @@ const DICT = {
     directions: { en: 'Get Directions', es: 'Cómo Llegar' },
     callUs: { en: 'Call Us', es: 'Llámanos' },
     parking: {
-      en: 'Free parking on site. Five minutes from the Disneyland Resort.',
-      es: 'Estacionamiento gratuito. A cinco minutos del Disneyland Resort.',
+      en: 'Studio hours are appointment hours — the door is answered for booked guests.',
+      es: 'El horario del estudio es horario de citas: abrimos para clientas con reserva.',
     },
   },
   cta: {
@@ -128,7 +128,7 @@ const DICT = {
     invalidPhone: { en: 'Enter a valid phone number', es: 'Ingresa un número de teléfono válido' },
     invalidEmail: { en: 'Enter a valid email address', es: 'Ingresa un correo electrónico válido' },
     noSlots: { en: 'No times available on this day', es: 'No hay horarios disponibles ese día' },
-    closedDay: { en: 'The salon is closed on this day', es: 'El salón está cerrado ese día' },
+    closedDay: { en: 'The studio is closed on this day', es: 'El estudio está cerrado ese día' },
     summary: { en: 'Your appointment', es: 'Tu cita' },
     labelService: { en: 'Service', es: 'Servicio' },
     labelDate: { en: 'Date', es: 'Fecha' },
@@ -171,8 +171,8 @@ const DICT = {
     },
     seasonal: { en: 'Seasonal Promotion', es: 'Promoción de Temporada' },
     seasonalBody: {
-      en: 'Placeholder offer — use for holiday and quinceañera season.',
-      es: 'Oferta de ejemplo — úsala para fiestas y temporada de quinceañeras.',
+      en: 'Placeholder offer — use for the holiday and event season.',
+      es: 'Oferta de ejemplo — úsala para fiestas y temporada de eventos.',
     },
   },
   footer: {
@@ -198,7 +198,7 @@ export function LanguageProvider({ children }: { children: ReactNode }) {
   const [lang, setLangState] = useState<Lang>('en');
 
   useEffect(() => {
-    const stored = window.localStorage.getItem('lbs-lang') as Lang | null;
+    const stored = window.localStorage.getItem('jaeso-lang') as Lang | null;
     if (stored === 'en' || stored === 'es') {
       setLangState(stored);
       return;
@@ -212,7 +212,7 @@ export function LanguageProvider({ children }: { children: ReactNode }) {
 
   const setLang = (l: Lang) => {
     setLangState(l);
-    window.localStorage.setItem('lbs-lang', l);
+    window.localStorage.setItem('jaeso-lang', l);
   };
 
   return <LangContext.Provider value={{ lang, setLang }}>{children}</LangContext.Provider>;

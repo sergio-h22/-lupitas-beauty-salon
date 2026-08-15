@@ -1,7 +1,15 @@
-# Lupita's Beauty Salon — website
+# Jaeso Studio — website
 
-Marketing site and appointment-booking interface for Lupita's Beauty Salon,
-700 W Orangewood Ave, Anaheim, CA 92802.
+Marketing site and appointment-booking interface for Jaeso Studio, a boutique
+hair studio in Anaheim, CA.
+
+> **Contact details in `lib/business.ts` are placeholders.** Phone, email,
+> street address, ZIP, map pin and domain are all stand-ins, each marked
+> `PLACEHOLDER` in that file. The phone number sits in the reserved 555-01xx
+> range so it cannot dial a real person if it ships by accident. The opening
+> hours are a plausible guess, not the studio's — and the booking flow reads
+> them directly, so it will sell appointments on whatever days are listed
+> there. Replace all of it before launch; see *Before you launch*.
 
 Next.js 16 (App Router) · React 19 · TypeScript · Tailwind CSS · Framer Motion.
 
@@ -132,10 +140,16 @@ centred-heading-over-a-grid sections is the single strongest "AI template"
 signal a page can have, however good each section is on its own. `align`
 defaults to `left` for that reason.
 
-**Gold is punctuation.** It appears on hairlines, serial numerals, the stops in
-the hero statement, and on dark ground. It is never a panel border, never a
-background, and never body text on cream (it fails contrast — see
-Accessibility). If gold shows up three times in one section, remove two.
+**The palette is monochrome, and that is the brand.** The studio's identity is
+a black disc, a bone card and a signature — three values, no hue. So there is
+no accent colour to spend here. Where a gilded salon brand would punctuate with
+gold, this one punctuates with contrast: bone on near-black, a hairline, the
+signature. `sand` is a warm grey for rules and hover states, not a colour —
+at 2.03:1 on bone it is never allowed to carry text (see Accessibility).
+
+**Red belongs to errors alone.** `alert` is a system colour. Nothing
+decorative, promotional or seasonal is ever tinted with it — the moment a
+banner borrows it, a form error stops reading as a warning.
 
 **Services are an index, not cards.** `ServiceIndex` sets the menu the way a
 tasting menu is set — numbered rows, hairline rules, the whole row as the hit
@@ -143,8 +157,15 @@ target. `ServiceCard` was deleted; do not reintroduce a bordered card grid.
 
 **Type scale is deliberately gapped.** Use the `display-xl / lg / md / sm`
 tokens rather than ad-hoc `text-[clamp(...)]`. Mid-sized headings everywhere is
-what makes a page look filled in rather than art-directed. Playfair carries
-every heading at weight 400 — do not bold it.
+what makes a page look filled in rather than art-directed. Bodoni carries every
+heading at weight 400 — do not bold it. It is a Didone, so its strokes thin as
+it scales up and thicken as it scales down: never set body copy in it, and
+never set it below about 1.25rem.
+
+**The signature appears once per page.** `.signature` (Italianno) is the
+wordmark and the footer sign-off, and nothing else. A script that turns up
+three times stops reading as a signature and starts reading as a font
+choice.
 
 **Motion has one signature.** Content lifts (`<Reveal>`), headings unmask
 (`variant="mask"`), rules draw (`variant="rule"`). Three variants, one easing
@@ -160,15 +181,22 @@ curve (`ease-luxe`). Do not add a fourth.
 
 ### `lib/business.ts` — name, phone, address, hours
 
+Every value marked `PLACEHOLDER` in this file is a stand-in and must be
+replaced. That is: phone, email, street, ZIP, geo, `siteUrl`, and all seven
+lines of `HOURS`.
+
 Hours drive the booking calendar, the footer, the location section and the
-structured data at once. Tuesday is set closed; change `open`/`close` to `null`
-to close another day.
+structured data at once. Sunday and Monday are currently set closed; change
+`open`/`close` to `null` to close another day. **These are a guess.** The
+booking flow offers appointments on whatever this file says is open, so a
+wrong line here books a client into a locked studio.
 
 `BUSINESS.siteUrl` is used for canonical URLs and the sitemap. **Change it to
 the real domain before launch** or Google will be told the wrong address.
 
-`BUSINESS.geo` is an approximate pin. Replace it with the exact coordinates
-from your Google Business Profile.
+`BUSINESS.geo` is currently the Anaheim city centroid, not the studio.
+Replace it with the exact coordinates from the Google Business Profile or the
+map link will land down the road.
 
 ### `lib/services.ts` — the service menu
 
@@ -185,8 +213,9 @@ at 5:30 PM when you close at 7.
 
 ### `lib/specialists.ts` — the team
 
-Three placeholder stylists with placeholder names and biographies. Replace all
-three before launch. Set `photo` to a path under `/public` and the placeholder
+Three placeholder stylists with placeholder names and biographies. These names
+are shown to clients as the person who will be cutting their hair, so replace
+all three before launch. Set `photo` to a path under `/public` and the placeholder
 tile is replaced automatically.
 
 ### `lib/i18n.tsx` — all site copy, both languages
@@ -203,10 +232,15 @@ should still read it once before launch.
 
 In rough priority order.
 
-1. **Real photography.** Every image is a labelled placeholder. This design
-   depends on photographs — the salon interior, stylists working, and genuine
-   before/after pairs. Start with the homepage and the six gallery slots.
-2. **Set the real domain** in `lib/business.ts`.
+1. **Replace every `PLACEHOLDER` in `lib/business.ts`** — phone, email, street,
+   ZIP, map pin, domain, and all seven lines of `HOURS`. Nothing else on this
+   list matters if the site publishes the wrong phone number or takes bookings
+   on a closed day.
+2. **Real photography.** Every image is a labelled placeholder. This design
+   depends on photographs, and more than most: the palette has no colour in it,
+   so the photographs are the only colour on the page. Shoot the studio
+   interior, stylists working, and genuine before/after pairs. Start with the
+   homepage and the six gallery slots.
 3. **Replace the three specialists** with real names, roles and biographies.
 4. **Decide the prices** or leave them as quote-on-request deliberately.
 5. **Replace the placeholder reviews.** These are marked as placeholders and
@@ -225,7 +259,7 @@ In rough priority order.
 ## Hosting
 
 **Vercel** is the recommendation. It is built by the same team as Next.js, the
-free tier covers a salon's traffic, HTTPS and a global CDN are automatic, and
+free tier covers a studio's traffic, HTTPS and a global CDN are automatic, and
 deploys happen on every push with no configuration. Connect the GitHub repo at
 vercel.com and it detects everything.
 
@@ -284,8 +318,8 @@ cannot take the same slot.
 
 ## SEO
 
-Targeting: *hair salon Anaheim CA*, *beauty salon near Disneyland*, *women's
-haircut Anaheim*, *hair color specialist Anaheim*, *salón de belleza Anaheim*.
+Targeting: *hair studio Anaheim CA*, *boutique hair salon Anaheim*, *balayage
+Anaheim*, *hair color specialist Anaheim*, *estudio de cabello Anaheim*.
 
 Published structured data:
 
@@ -302,7 +336,7 @@ bookings than any further change to this code.
 Deliberately omitted: `Review` and `AggregateRating` markup, because the
 current reviews are placeholders; and `Product` markup on services, because a
 price-less `Product` reports a missing-offer error. Services are modelled as
-part of the salon entity instead.
+part of the studio entity instead.
 
 ---
 
@@ -310,16 +344,22 @@ part of the salon entity instead.
 
 Checked, not assumed:
 
-- Brand palette measured against WCAG. Brass `#C9A227` is **2.26:1 on cream** —
-  it fails as text on light grounds, so it is used only for rules, borders,
-  numerals and gold-on-black. Text needing gold uses `#7A5F18` (5.61:1). The
-  same applies to soft rose: `#D8A7A7` decoratively, `#8C5252` (5.66:1) for
-  text. **Do not set body text in `#C9A227` on cream.**
-- The lightest text tone, `ink.faint` `#6F6859`, measures 5.17:1 on cream and
-  4.66:1 on cream-deep — it carries small meta text (durations, prices,
+- Brand palette measured against WCAG. `sand` `#B9AA96` is **2.03:1 on bone** —
+  it fails as text on light grounds, so it is used only for rules, borders and
+  hover states. Text needing that warmth uses `sand.text` `#6E6252` (5.32:1),
+  and on near-black `sand.soft` `#D8CDBC` (12.61:1). **Do not set body text in
+  `#B9AA96` on bone.**
+- The lightest text tone, `ink.faint` `#6B6355`, measures 5.31:1 on bone and
+  4.73:1 on bone-deep — it carries small meta text (durations, prices,
   captions) so it has to clear AA on both grounds. An earlier, prettier
-  `#948C81` measured 3.10:1 and was rejected.
-- Body text 6.17:1, headings 18.2:1.
+  `#948C81` measured 2.90:1 and was rejected.
+- `alert` `#C0463C` is a fill and hairline only (4.49:1 — short of AA for body
+  text). Error text uses `alert.text` `#94291F` (7.24:1 on bone), and the
+  inverted footer uses `alert.soft` `#E8A9A0` (10.01:1 on ink).
+- Body text 6.38:1, headings 17.7:1.
+- The monochrome palette means colour is never the sole carrier of meaning
+  anywhere on the site — which was true of the previous palette by discipline,
+  and is now true by construction.
 - Every interactive target is at least 44×44px.
 - Visible focus rings everywhere; none are removed.
 - `prefers-reduced-motion` forces every reveal to its resting state rather than
@@ -340,8 +380,9 @@ complete, and the console is clean — no JS errors, no failed requests.
 ## Performance
 
 - Every page prerenders as static HTML.
-- **Five font weights, down from nine.** Playfair Display 400/500 and Jost
-  300/400/500, self-hosted through `next/font`.
+- **Six font weights across three families.** Bodoni Moda 400/500, Jost
+  300/400/500 and Italianno 400, self-hosted through `next/font`. Italianno is
+  a single weight used on two elements; it is the cheapest of the three.
 - **No animation library.** Scroll reveals are CSS transitions toggled by a
   single shared `IntersectionObserver` (`components/Reveal.tsx`), replacing
   framer-motion — roughly 50 kB gzipped removed from every page for motion

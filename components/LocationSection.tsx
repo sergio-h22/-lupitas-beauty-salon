@@ -74,11 +74,11 @@ export default function LocationSection({ index }: { index?: string }) {
                     >
                       <dt className="flex items-center gap-2.5">
                         {isToday && (
-                          <span aria-hidden="true" className="h-1 w-1 rounded-full bg-gold" />
+                          <span aria-hidden="true" className="h-1 w-1 rounded-full bg-sand" />
                         )}
                         {DAY_LABEL[day][lang]}
                       </dt>
-                      <dd className={h.open ? 'tabular-nums' : 'text-rose-text'}>
+                      <dd className={h.open ? 'tabular-nums' : 'text-alert-text'}>
                         {h.open ? `${fmt(h.open, lang)} – ${fmt(h.close!, lang)}` : t('location.closed')}
                       </dd>
                     </div>

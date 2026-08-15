@@ -9,14 +9,19 @@ import Specialists from '@/components/Specialists';
 import LocationSection from '@/components/LocationSection';
 import BookingCTA from '@/components/BookingCTA';
 
+/**
+ * PLACEHOLDER NARRATIVE. The structure is right — story, mission, method,
+ * three values — but every sentence below describes a studio in general
+ * rather than this one. Replace with the founder's own account before launch.
+ */
 const COPY = {
   story: {
-    en: 'Lupita’s Beauty Salon has served Anaheim from West Orangewood Avenue, five minutes from the Disneyland Resort. The salon was built around one idea: that a haircut is a conversation before it is a service. Clients come back because they are listened to, not because they were upsold.',
-    es: 'Lupita’s Beauty Salon atiende a Anaheim desde West Orangewood Avenue, a cinco minutos del Disneyland Resort. El salón se construyó sobre una idea: que un corte de cabello es una conversación antes que un servicio. Las clientas regresan porque se les escucha, no porque se les vendió de más.',
+    en: 'Jaeso Studio is a small hair studio in Anaheim, California, built around a single idea: that a haircut is a conversation before it is a service. One guest is booked at a time, so an appointment is never squeezed between two others. Clients come back because they were listened to, not because they were upsold.',
+    es: 'Jaeso Studio es un pequeño estudio de cabello en Anaheim, California, construido sobre una idea: que un corte de cabello es una conversación antes que un servicio. Se reserva a una clienta a la vez, así que ninguna cita queda apretada entre otras dos. Las clientas regresan porque se les escuchó, no porque se les vendió de más.',
   },
   mission: {
-    en: 'Lupita’s Beauty Salon is dedicated to helping every customer feel confident and beautiful through personalized hair care and professional styling.',
-    es: 'Lupita’s Beauty Salon se dedica a ayudar a cada cliente a sentirse segura y hermosa mediante cuidado capilar personalizado y peinado profesional.',
+    en: 'Cut with intention, coloured to live in, and finished at a pace that leaves room to change your mind.',
+    es: 'Cortado con intención, con color para vivir en él, y terminado a un ritmo que deja espacio para cambiar de opinión.',
   },
   experience: {
     en: 'Every appointment begins with a consultation — your hair history, what has worked, what has not, and how much time you actually want to spend styling at home. Pricing is confirmed before any work begins, so nothing on the final bill is a surprise.',
@@ -24,17 +29,17 @@ const COPY = {
   },
   values: [
     {
-      title: { en: 'Personalized', es: 'Personalizado' },
+      title: { en: 'One at a time', es: 'Una a la vez' },
       body: {
-        en: 'No two heads of hair are the same, so no two appointments run the same way.',
-        es: 'No hay dos cabellos iguales, así que no hay dos citas iguales.',
+        en: 'A single guest per slot. The room, the mirror and the hour are yours.',
+        es: 'Una sola clienta por turno. El espacio, el espejo y la hora son tuyos.',
       },
     },
     {
-      title: { en: 'Bilingual', es: 'Bilingüe' },
+      title: { en: 'Built to grow out', es: 'Hecho para crecer' },
       body: {
-        en: 'Se habla español. Explain what you want in the language you think in.',
-        es: 'Se habla español. Explica lo que quieres en el idioma en que piensas.',
+        en: 'Colour and shape placed so month four still looks deliberate, not overdue.',
+        es: 'Color y forma pensados para que el cuarto mes siga viéndose intencional, no vencido.',
       },
     },
     {
@@ -75,7 +80,7 @@ export default function AboutClient() {
             </Reveal>
 
             <Reveal delay={0.18}>
-              <blockquote className="mt-10 border-l border-gold pl-6 font-display text-[clamp(1.25rem,2.6vw,1.7rem)] leading-snug text-ink">
+              <blockquote className="mt-10 border-l border-sand pl-6 font-display text-[clamp(1.25rem,2.6vw,1.7rem)] leading-snug text-ink">
                 {COPY.mission[lang]}
               </blockquote>
             </Reveal>
@@ -88,7 +93,7 @@ export default function AboutClient() {
           <div className="grid grid-cols-2 gap-5 sm:gap-7 lg:col-span-5">
             <Reveal>
               <PhotoPlaceholder
-                label={lang === 'es' ? 'Entrada del salón' : 'Salon entrance'}
+                label={lang === 'es' ? 'Entrada del estudio' : 'Studio entrance'}
                 ratio="aspect-[3/4]"
                 sizes="(min-width: 1024px) 21vw, 45vw"
               />
@@ -104,7 +109,7 @@ export default function AboutClient() {
         </div>
       </section>
 
-      <section className="bg-cream-deep py-section">
+      <section className="bg-bone-deep py-section">
         <div className="shell">
           <Reveal className="flex items-center gap-4">
             <span className="serial" aria-hidden="true">
