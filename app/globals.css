@@ -77,21 +77,15 @@
 
   /* ---- Editorial labels ------------------------------------------------ */
 
-  /* Tracked-out uppercase at full ink — the same lockup as the STUDIO line
-     under the mark. A tinted eyebrow is how a gilded brand labels a section;
-     this one labels with contrast, and lets the hairline carry the warmth. */
+  /* Tracked-out uppercase at full ink — the geometric counterweight to the
+     signature. A tinted eyebrow is how a gilded brand labels a section; this
+     one labels with contrast, and lets the hairline carry the warmth. */
   .eyebrow {
     @apply font-body text-label font-medium uppercase text-ink;
   }
 
   .eyebrow-light {
     @apply font-body text-label font-medium uppercase text-bone;
-  }
-
-  /* The signature, reused. Set the studio name in it and nothing else — a
-     script that appears twice on a page stops reading as a signature. */
-  .signature {
-    @apply font-script leading-none;
   }
 
   /* Serial numerals. The single strongest art-direction signal on the page —

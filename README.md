@@ -162,10 +162,33 @@ heading at weight 400 — do not bold it. It is a Didone, so its strokes thin as
 it scales up and thicken as it scales down: never set body copy in it, and
 never set it below about 1.25rem.
 
-**The signature appears once per page.** `.signature` (Italianno) is the
-wordmark and the footer sign-off, and nothing else. A script that turns up
-three times stops reading as a signature and starts reading as a font
-choice.
+**The mark is artwork, not type.** The studio's logo — the signature beside
+the drawn figure — ships as vector outlines in `components/brand-art.ts` and
+is rendered by `components/BrandMark.tsx`. No script webfont is loaded
+anywhere, so the mark cannot reflow or flash a fallback hand mid-load, and it
+draws identically in the favicon and the Open Graph card, neither of which can
+load a font at all.
+
+`BrandMark` has three cuts, and each exists because one drawing cannot do
+every job. `lockup` is the mark as the studio uses it. `word` drops the figure
+for the footer sign-off, where at full width the figure would tower over the
+columns and read as an illustration. `figure` drops the signature for the
+favicon, where a hairline script collapses into a grey smudge at 16px but the
+figure keeps a silhouette. Everything paints in `currentColor`, so the mark
+inverts by setting a text colour — there is no second copy for dark grounds.
+
+**The mark is a redraw, not the original file.** The signature is outlined
+from a script face fitted to the studio's own, and the figure is drawn to
+match. It is close, but a signature is exactly the asset where close is not
+the same as right. When the real vector arrives from whoever drew it, replace
+`WORDMARK` and `SWASH` in `components/brand-art.ts` and the `Figure` in
+`BrandMark.tsx` — nothing else in the codebase touches the artwork.
+
+**The mark carries no "STUDIO" line.** The temptation is to bolt the word on
+so the header states the business name in full. Setting tracked-out type
+beside someone's handwriting is what makes a signature read as a template
+instead of as theirs; the full name is carried by the page title, the footer
+sign-off and the structured data.
 
 **Motion has one signature.** Content lifts (`<Reveal>`), headings unmask
 (`variant="mask"`), rules draw (`variant="rule"`). Three variants, one easing
@@ -380,9 +403,14 @@ complete, and the console is clean — no JS errors, no failed requests.
 ## Performance
 
 - Every page prerenders as static HTML.
-- **Six font weights across three families.** Bodoni Moda 400/500, Jost
-  300/400/500 and Italianno 400, self-hosted through `next/font`. Italianno is
-  a single weight used on two elements; it is the cheapest of the three.
+- **Five font weights across two families.** Bodoni Moda 400/500 and Jost
+  300/400/500, self-hosted through `next/font`. There is deliberately no
+  script face: the signature is artwork and ships as vector outlines, so the
+  wordmark costs no font request at all.
+- **The mark is inline SVG, roughly 8 kB of path data.** It appears twice per
+  page (header and footer), but the second copy is a byte-identical string and
+  compresses to almost nothing, and inlining avoids a render-blocking request
+  for the one element that is above the fold on every page.
 - **No animation library.** Scroll reveals are CSS transitions toggled by a
   single shared `IntersectionObserver` (`components/Reveal.tsx`), replacing
   framer-motion — roughly 50 kB gzipped removed from every page for motion

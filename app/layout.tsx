@@ -1,5 +1,5 @@
 import type { Metadata } from 'next';
-import { Bodoni_Moda, Jost, Italianno } from 'next/font/google';
+import { Bodoni_Moda, Jost } from 'next/font/google';
 import './globals.css';
 import { LanguageProvider } from '@/lib/i18n';
 import Header from '@/components/Header';
@@ -9,16 +9,19 @@ import MobileCallBar from '@/components/MobileCallBar';
 import { BUSINESS, ADDRESS_LINE, HOURS } from '@/lib/business';
 
 /**
- * Three faces, six weights, each with exactly one job.
+ * Two faces, five weights, each with exactly one job.
  *
  * Bodoni Moda is a Didone — the fashion-plate serif, and the closest type
  * relative of the stark JAESO lockup. It carries every heading at a single
  * regular weight: a high-contrast serif set large does not need bolding, and
  * faux-bolding it is what makes a display face look cheap. Jost (a geometric
  * in the Futura lineage) takes UI and body, where tracked-out uppercase is
- * exactly where a geometric earns its keep. Italianno appears in one place
- * only — the signature in the wordmark — which is what keeps it a signature
- * instead of a decoration.
+ * exactly where a geometric earns its keep.
+ *
+ * There is deliberately no script face. The signature is the studio's own
+ * artwork and ships as vector outlines (components/brand-art.ts), so the mark
+ * cannot flash a fallback hand while a webfont loads, and no third party gets
+ * to change what the brand's handwriting looks like.
  */
 const display = Bodoni_Moda({
   subsets: ['latin'],
@@ -31,13 +34,6 @@ const body = Jost({
   subsets: ['latin'],
   weight: ['300', '400', '500'],
   variable: '--font-body',
-  display: 'swap',
-});
-
-const script = Italianno({
-  subsets: ['latin'],
-  weight: '400',
-  variable: '--font-script',
   display: 'swap',
 });
 
@@ -127,7 +123,7 @@ function schema() {
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
-    <html lang="en" className={`${display.variable} ${body.variable} ${script.variable}`}>
+    <html lang="en" className={`${display.variable} ${body.variable}`}>
       <head>
         {/* Scroll reveals start at opacity 0 and are switched on by an
             IntersectionObserver. Without JS that observer never runs, so the

@@ -5,6 +5,7 @@ import { useState } from 'react';
 import { useT, useLang } from '@/lib/i18n';
 import { BUSINESS, HOURS, DAY_ORDER, MAPS_QUERY } from '@/lib/business';
 import Logo from './Logo';
+import BrandMark from './BrandMark';
 
 const DAY_LABEL: Record<number, { en: string; es: string }> = {
   0: { en: 'Sunday', es: 'Domingo' },
@@ -87,17 +88,19 @@ export default function Footer() {
         </div>
       </div>
 
-      {/* Oversized signature as a sign-off — the studio's own hand, set at the
-          scale of a page rather than a business card. Purely typographic, costs
-          nothing, and it is what makes a footer feel like the end of a brand's
-          page rather than the bottom of a template.
+      {/* The signature again as a sign-off, at the scale of a page rather than
+          a business card. It is what makes a footer feel like the end of a
+          brand's page rather than the bottom of a template.
 
-          Held at 8% rather than the 6% a serif would take: Italianno's strokes
-          are hairlines, and below that it stops resolving as a word at all. */}
-      <div className="shell overflow-hidden pb-4" aria-hidden="true">
-        <p className="signature select-none whitespace-nowrap text-[clamp(4.5rem,19vw,16rem)] text-bone/[0.08]">
-          Jaeso Studio
-        </p>
+          The figure is dropped here: at this width it would tower over the
+          columns above and read as an illustration rather than a signature.
+          Held at 10% — the signature is a hairline stroke, and below that it
+          stops resolving as a word at all. */}
+      <div className="shell overflow-hidden pb-4">
+        <BrandMark
+          variant="word"
+          className="h-[clamp(7rem,26vw,20rem)] w-auto select-none text-bone/10"
+        />
       </div>
 
       <div className="border-t border-bone/10">

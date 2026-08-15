@@ -1,5 +1,30 @@
+<!--
+  Favicon: the figure from the studio's mark, alone.
+
+  The signature is the more distinctive half of the lockup and the wrong half
+  for this job — at 16px a hairline script collapses into a grey smudge. The
+  figure keeps a readable silhouette all the way down, so the tab carries that
+  and the strokes are thickened to survive the reduction.
+-->
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 40 40">
   <rect width="40" height="40" fill="#0A0A0A"/>
-  <path d="M15.6 10.6 H29 M23.2 10.6 V25.4 C23.2 29.4 20.4 31.8 16.6 31.8 C13.1 31.8 10.6 29.9 9.7 26.6"
-        stroke="#F5F2EC" stroke-width="2.1" fill="none"/>
+  <g transform="translate(-28.5,1.5) scale(0.18)" stroke="#F5F2EC" stroke-width="11"
+     stroke-linecap="round" stroke-linejoin="round" fill="none">
+    <circle cx="278" cy="66" r="19"/>
+    <path d="M278 88 L256 152 C268 157, 289 157, 301 152 Z"/>
+    <path d="M270 100 L248 124"/>
+    <path d="M287 100 L311 120"/>
+    <path d="M268 154 L265 184"/>
+    <path d="M289 154 L292 184"/>
+  </g>
+  <g transform="translate(-28.5,1.5) scale(0.18)" fill="#F5F2EC">
+    <path d="M292 52 C286 40, 274 34, 262 34 C250 34, 240 30, 232 24
+             C238 34, 248 40, 258 42 C246 42, 236 40, 228 36
+             C236 46, 248 52, 260 52 C250 54, 242 54, 234 52
+             C244 60, 258 62, 270 58 C278 55, 286 54, 292 58 Z"/>
+  </g>
+  <g transform="translate(-28.5,1.5) scale(0.18)" fill="#0A0A0A">
+    <circle cx="270" cy="64" r="6"/>
+    <circle cx="286" cy="64" r="6"/>
+  </g>
 </svg>

@@ -9,7 +9,7 @@ import type { Config } from 'tailwindcss';
  *
  *  1. The palette is ink, bone and one warm neutral. Where a gilded salon
  *     brand would punctuate with gold, this one punctuates with contrast —
- *     bone on near-black, a hairline, a signature set in script. Sand is a
+ *     bone on near-black, a hairline, the signature itself. Sand is a
  *     quiet warm grey, not an accent colour; at 2.03:1 on bone it is never
  *     allowed to carry text. `sand.text` is the compliant substitute (5.32:1).
  *  2. Red belongs to errors alone. `alert` is a system colour, never a brand
@@ -66,8 +66,6 @@ const config: Config = {
       fontFamily: {
         display: ['var(--font-display)', 'Didot', 'Georgia', 'serif'],
         body: ['var(--font-body)', 'system-ui', 'sans-serif'],
-        /** Reserved for the wordmark and its echoes. Never for running text. */
-        script: ['var(--font-script)', 'Snell Roundhand', 'cursive'],
       },
 
       /**
