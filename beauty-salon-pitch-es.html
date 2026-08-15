@@ -1,0 +1,387 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Lupita's Beauty Salon — Sitio Web Profesional</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      line-height: 1.6;
+      color: #333;
+      background: #f8f8f8;
+    }
+
+    .container {
+      max-width: 900px;
+      margin: 40px auto;
+      background: white;
+      box-shadow: 0 4px 20px rgba(0,0,0,0.08);
+      border-radius: 8px;
+      overflow: hidden;
+    }
+
+    .header {
+      background: linear-gradient(135deg, #1a1a1a 0%, #2d2d2d 100%);
+      color: white;
+      padding: 60px 40px;
+      text-align: center;
+    }
+
+    .header h1 {
+      font-size: 2.5em;
+      margin-bottom: 12px;
+      font-weight: 700;
+    }
+
+    .header .tagline {
+      font-size: 1.2em;
+      opacity: 0.9;
+      margin-bottom: 30px;
+    }
+
+    .header .subtitle {
+      font-size: 0.95em;
+      opacity: 0.8;
+      max-width: 600px;
+      margin: 0 auto;
+    }
+
+    .content {
+      padding: 50px 40px;
+    }
+
+    .intro {
+      margin-bottom: 50px;
+      padding: 25px;
+      background: #f0f4f8;
+      border-left: 4px solid #d4af37;
+      border-radius: 4px;
+    }
+
+    .intro p {
+      font-size: 1.05em;
+      margin-bottom: 10px;
+    }
+
+    .intro strong {
+      color: #1a1a1a;
+    }
+
+    .benefits {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 30px;
+      margin-bottom: 50px;
+    }
+
+    .benefit {
+      padding: 25px;
+      background: #fafafa;
+      border-radius: 6px;
+      border: 1px solid #e8e8e8;
+      transition: all 0.3s ease;
+    }
+
+    .benefit:hover {
+      border-color: #d4af37;
+      box-shadow: 0 4px 12px rgba(212, 175, 55, 0.1);
+    }
+
+    .benefit-number {
+      display: inline-block;
+      width: 36px;
+      height: 36px;
+      background: #d4af37;
+      color: #1a1a1a;
+      border-radius: 50%;
+      text-align: center;
+      line-height: 36px;
+      font-weight: bold;
+      margin-bottom: 12px;
+      font-size: 1.1em;
+    }
+
+    .benefit h3 {
+      color: #1a1a1a;
+      font-size: 1.15em;
+      margin-bottom: 8px;
+      font-weight: 600;
+    }
+
+    .benefit p {
+      font-size: 0.95em;
+      line-height: 1.5;
+      color: #555;
+    }
+
+    .highlight {
+      color: #d4af37;
+      font-weight: 600;
+    }
+
+    .features-section {
+      margin-bottom: 50px;
+    }
+
+    .features-section h2 {
+      color: #1a1a1a;
+      font-size: 1.4em;
+      margin-bottom: 25px;
+      padding-bottom: 15px;
+      border-bottom: 2px solid #d4af37;
+    }
+
+    .feature-list {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 20px;
+    }
+
+    .feature-item {
+      display: flex;
+      gap: 12px;
+      align-items: flex-start;
+    }
+
+    .feature-item::before {
+      content: "✓";
+      color: #d4af37;
+      font-weight: bold;
+      font-size: 1.3em;
+      flex-shrink: 0;
+    }
+
+    .feature-item p {
+      font-size: 0.95em;
+      color: #555;
+    }
+
+    .cta-section {
+      background: linear-gradient(135deg, #1a1a1a 0%, #2d2d2d 100%);
+      color: white;
+      padding: 40px;
+      border-radius: 6px;
+      text-align: center;
+      margin-top: 50px;
+    }
+
+    .cta-section h2 {
+      font-size: 1.5em;
+      margin-bottom: 15px;
+    }
+
+    .cta-section p {
+      font-size: 1.05em;
+      opacity: 0.95;
+      margin-bottom: 25px;
+    }
+
+    .cta-button {
+      display: inline-block;
+      background: #d4af37;
+      color: #1a1a1a;
+      padding: 14px 40px;
+      border-radius: 4px;
+      text-decoration: none;
+      font-weight: 600;
+      font-size: 1.05em;
+      transition: all 0.3s ease;
+      border: none;
+      cursor: pointer;
+    }
+
+    .cta-button:hover {
+      background: #e8c547;
+      transform: translateY(-2px);
+      box-shadow: 0 6px 20px rgba(212, 175, 55, 0.3);
+    }
+
+    .specs {
+      margin-top: 50px;
+      padding-top: 30px;
+      border-top: 1px solid #e8e8e8;
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 30px;
+      text-align: center;
+    }
+
+    .spec-item {
+      font-size: 0.9em;
+    }
+
+    .spec-value {
+      color: #d4af37;
+      font-weight: 700;
+      font-size: 1.4em;
+      display: block;
+      margin-bottom: 5px;
+    }
+
+    .spec-label {
+      color: #666;
+      font-size: 0.85em;
+    }
+
+    @media (max-width: 768px) {
+      .header h1 {
+        font-size: 1.8em;
+      }
+
+      .benefits, .feature-list, .specs {
+        grid-template-columns: 1fr;
+      }
+
+      .content, .header {
+        padding: 30px 20px;
+      }
+
+      .header {
+        padding: 40px 20px;
+      }
+    }
+
+    @media print {
+      body {
+        background: white;
+      }
+
+      .container {
+        box-shadow: none;
+        margin: 0;
+      }
+
+      .benefit:hover, .cta-button:hover {
+        box-shadow: none;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <div class="header">
+      <h1>Lupita's Beauty Salon</h1>
+      <p class="tagline">Solución de Sitio Web Profesional</p>
+      <p class="subtitle">Sé encontrado, consigue citas, genera confianza — todo en una plataforma hermosa</p>
+    </div>
+
+    <div class="content">
+      <div class="intro">
+        <p><strong>Deja de perder clientes por sitios web anticuados.</strong> Un sitio web de salón profesional y móvil convierte visitantes curiosos en citas reservadas. Esta solución hace exactamente eso — y cuesta menos de lo que piensas para lanzar.</p>
+      </div>
+
+      <div class="benefits">
+        <div class="benefit">
+          <div class="benefit-number">1</div>
+          <h3>Sé Encontrado por Clientes</h3>
+          <p>Optimización de Google Maps, SEO local con datos estructurados, y un mapa del sitio que le dice a Google sobre tu negocio. Posiciónate para "salón cerca de mí" y "salón Anaheim".</p>
+        </div>
+
+        <div class="benefit">
+          <div class="benefit-number">2</div>
+          <h3>Carga Ultrarrápida</h3>
+          <p>Se carga en <span class="highlight">menos de 3 segundos</span> en móvil. Los clientes no esperan — reservan. Cada página se pre-renderiza como HTML estático, sin retrasos del servidor.</p>
+        </div>
+
+        <div class="benefit">
+          <div class="benefit-number">3</div>
+          <h3>Reservas Reales en Segundos</h3>
+          <p>Flujo de cinco pasos que lleva a los clientes de "me interesa" a confirmado en menos de un minuto. Sin crear cuenta, sin fricción. Las citas aparecen en tu panel de control del propietario inmediatamente.</p>
+        </div>
+
+        <div class="benefit">
+          <div class="benefit-number">4</div>
+          <h3>Llamada y Reserva Pegada en Móvil</h3>
+          <p>En teléfonos, una barra persistente de llamada/reserva se mantiene en la parte inferior de la pantalla. Los clientes pueden llamar o reservar sin desplazarse — los clics impulsivos se convierten.</p>
+        </div>
+
+        <div class="benefit">
+          <div class="benefit-number">5</div>
+          <h3>Bilingüe por Defecto</h3>
+          <p>Soporte completo en inglés/español en cada página. Selector de idioma en el encabezado, detecta navegadores en español automáticamente. Un sitio web, dos mercados.</p>
+        </div>
+
+        <div class="benefit">
+          <div class="benefit-number">6</div>
+          <h3>Diseño Profesional</h3>
+          <p>Estética de belleza de lujo con paleta de colores personalizada, fuentes cuidadosamente seleccionadas y animaciones suaves activadas por desplazamiento. Se ve tan bien en teléfono como en escritorio.</p>
+        </div>
+
+        <div class="benefit">
+          <div class="benefit-number">7</div>
+          <h3>Completamente Accesible</h3>
+          <p>Cumple con WCAG en proporciones de contraste, navegación por teclado, soporte para lectores de pantalla y respeta las preferencias de movimiento del usuario. Llega a cada cliente, incluyendo aquellos con discapacidades.</p>
+        </div>
+
+        <div class="benefit">
+          <div class="benefit-number">8</div>
+          <h3>Crece Sin Límites</h3>
+          <p>Construido con Next.js con ganchos de base de datos reales pre-integrados. Conecta un backend más tarde — añade confirmaciones, recordatorios, horarios bloqueados, miembros del equipo. Sin refactorización necesaria.</p>
+        </div>
+      </div>
+
+      <div class="features-section">
+        <h2>Qué Está Incluido</h2>
+        <div class="feature-list">
+          <div class="feature-item">
+            <p><span class="highlight">Página de inicio</span> con video de héroe, vista previa de servicios y galería</p>
+          </div>
+          <div class="feature-item">
+            <p><span class="highlight">Catálogo de servicios</span> — hasta 22 servicios con filtrado</p>
+          </div>
+          <div class="feature-item">
+            <p><span class="highlight">Galería antes/después</span> con deslizador de arrastrar para comparar</p>
+          </div>
+          <div class="feature-item">
+            <p><span class="highlight">Página del equipo</span> con biografías de especialistas y enlaces de reserva</p>
+          </div>
+          <div class="feature-item">
+            <p><span class="highlight">Flujo de reserva de 5 pasos</span> con lógica de disponibilidad real</p>
+          </div>
+          <div class="feature-item">
+            <p><span class="highlight">Panel de control del propietario</span> para ver y gestionar reservas</p>
+          </div>
+          <div class="feature-item">
+            <p><span class="highlight">Embed de Google Maps</span> con direcciones</p>
+          </div>
+          <div class="feature-item">
+            <p><span class="highlight">Suscripción a boletín</span> y secciones de promociones</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="specs">
+        <div class="spec-item">
+          <span class="spec-value">$0</span>
+          <span class="spec-label">Alojamiento (Tier Gratuito de Vercel)</span>
+        </div>
+        <div class="spec-item">
+          <span class="spec-value">&lt;3s</span>
+          <span class="spec-label">Tiempo de Carga de Página</span>
+        </div>
+        <div class="spec-item">
+          <span class="spec-value">2 Idiomas</span>
+          <span class="spec-label">EN + ES Bilingüe</span>
+        </div>
+        <div class="spec-item">
+          <span class="spec-value">22 Servicios</span>
+          <span class="spec-label">Menú Totalmente Personalizable</span>
+        </div>
+      </div>
+
+      <div class="cta-section">
+        <h2>¿Listo para Tener Reservas?</h2>
+        <p>Un sitio web profesional ya no es un lujo — es cómo los clientes te encuentran. Esta solución se lanza rápido, cuesta casi nada, y convierte navegadores en reservas.</p>
+        <button class="cta-button">Comienza Tu Sitio Web Hoy</button>
+      </div>
+    </div>
+  </div>
+</body>
+</html>

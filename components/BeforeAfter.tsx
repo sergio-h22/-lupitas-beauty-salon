@@ -1,5 +1,6 @@
 'use client';
 
+import Image from 'next/image';
 import { useRef, useState } from 'react';
 import { useT } from '@/lib/i18n';
 
@@ -24,7 +25,7 @@ export default function BeforeAfter({
     <figure className="group">
       <div
         ref={wrap}
-        className="relative aspect-[4/3] w-full select-none overflow-hidden bg-cream-deep"
+        className="relative aspect-[4/3] w-full select-none overflow-hidden border border-ink/10 bg-cream-deep"
       >
         {/* After (full width, underneath) */}
         <Panel src={afterSrc} caption={t('gallery.after')} />
@@ -36,11 +37,17 @@ export default function BeforeAfter({
 
         <div
           aria-hidden="true"
-          className="pointer-events-none absolute inset-y-0 w-0.5 bg-gold"
+          className="pointer-events-none absolute inset-y-0 w-px bg-gold"
           style={{ left: `${pos}%` }}
         >
-          <span className="absolute top-1/2 left-1/2 flex h-11 w-11 -translate-x-1/2 -translate-y-1/2 items-center justify-center rounded-full border border-gold bg-cream shadow-lg">
-            <svg viewBox="0 0 24 24" className="h-4 w-4 text-ink" fill="none" stroke="currentColor" strokeWidth="2">
+          <span className="absolute left-1/2 top-1/2 flex h-11 w-11 -translate-x-1/2 -translate-y-1/2 items-center justify-center rounded-full border border-gold bg-cream">
+            <svg
+              viewBox="0 0 24 24"
+              className="h-4 w-4 text-ink"
+              fill="none"
+              stroke="currentColor"
+              strokeWidth="1.5"
+            >
               <path strokeLinecap="round" strokeLinejoin="round" d="m8 9-3 3 3 3m8-6 3 3-3 3" />
             </svg>
           </span>
@@ -56,7 +63,13 @@ export default function BeforeAfter({
           className="absolute inset-0 h-full w-full cursor-ew-resize opacity-0"
         />
       </div>
-      <figcaption className="mt-3 text-sm font-medium text-ink">{label}</figcaption>
+
+      <figcaption className="mt-4 flex items-baseline justify-between gap-4 border-t border-ink/10 pt-4">
+        <span className="font-display text-[1.05rem] text-ink">{label}</span>
+        <span className="font-body text-label font-medium uppercase text-ink-faint">
+          {t('gallery.before')} / {t('gallery.after')}
+        </span>
+      </figcaption>
     </figure>
   );
 }
@@ -70,33 +83,26 @@ function Panel({
   caption: string;
   tone?: 'base' | 'deep';
 }) {
-  const t = useT();
-
   if (src) {
-    // eslint-disable-next-line @next/next/no-img-element
-    return <img src={src} alt="" className="h-full w-full object-cover" loading="lazy" decoding="async" />;
+    return (
+      <Image
+        src={src}
+        alt=""
+        fill
+        sizes="(min-width: 768px) 45vw, 92vw"
+        className="object-cover"
+      />
+    );
   }
 
   return (
     <div
-      className={`placeholder-tile h-full w-full ${tone === 'deep' ? 'bg-cream-warm' : 'bg-cream-deep'}`}
+      className={`placeholder-tile h-full w-full gap-3 ${
+        tone === 'deep' ? 'bg-cream-warm' : 'bg-cream-deep'
+      }`}
     >
-      <CameraIcon />
-      <span className="text-[0.65rem] font-semibold uppercase tracking-[0.18em]">{caption}</span>
-      <span className="px-6 text-xs">{t('gallery.placeholder')}</span>
+      <span aria-hidden="true" className="absolute inset-3 border border-ink/10" />
+      <span className="font-body text-label font-medium uppercase text-ink-faint">{caption}</span>
     </div>
-  );
-}
-
-function CameraIcon() {
-  return (
-    <svg viewBox="0 0 24 24" aria-hidden="true" className="h-7 w-7 text-gold" fill="none" stroke="currentColor" strokeWidth="1.4">
-      <path
-        strokeLinecap="round"
-        strokeLinejoin="round"
-        d="M6.827 6.175A2.31 2.31 0 0 1 5.186 7.23c-.38.054-.757.112-1.134.175C2.999 7.58 2.25 8.507 2.25 9.574V18a2.25 2.25 0 0 0 2.25 2.25h15A2.25 2.25 0 0 0 21.75 18V9.574c0-1.067-.75-1.994-1.802-2.169a47.865 47.865 0 0 0-1.134-.175 2.31 2.31 0 0 1-1.64-1.055l-.822-1.316a2.192 2.192 0 0 0-1.736-1.039 48.774 48.774 0 0 0-5.232 0 2.192 2.192 0 0 0-1.736 1.039l-.822 1.316Z"
-      />
-      <path strokeLinecap="round" strokeLinejoin="round" d="M16.5 12.75a4.5 4.5 0 1 1-9 0 4.5 4.5 0 0 1 9 0Z" />
-    </svg>
   );
 }

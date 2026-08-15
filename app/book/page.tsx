@@ -1,5 +1,6 @@
 import type { Metadata } from 'next';
 import { Suspense } from 'react';
+import { StripeProvider } from '@/components/StripeProvider';
 import BookingFlow from './BookingFlow';
 import BookingHeader from './BookingHeader';
 
@@ -15,7 +16,9 @@ export default function BookPage() {
     <>
       <BookingHeader />
       <Suspense fallback={<div className="shell py-section" />}>
-        <BookingFlow />
+        <StripeProvider>
+          <BookingFlow />
+        </StripeProvider>
       </Suspense>
     </>
   );

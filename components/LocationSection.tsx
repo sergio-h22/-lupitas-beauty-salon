@@ -1,7 +1,7 @@
 'use client';
 
 import { useT, useLang } from '@/lib/i18n';
-import { BUSINESS, ADDRESS_LINE, HOURS, DAY_ORDER, MAPS_QUERY } from '@/lib/business';
+import { BUSINESS, HOURS, DAY_ORDER, MAPS_QUERY } from '@/lib/business';
 import SectionHeading from './SectionHeading';
 import Reveal from './Reveal';
 
@@ -15,7 +15,7 @@ const DAY_LABEL: Record<number, { en: string; es: string }> = {
   6: { en: 'Saturday', es: 'Sábado' },
 };
 
-export default function LocationSection() {
+export default function LocationSection({ index }: { index?: string }) {
   const t = useT();
   const { lang } = useLang();
   const today = new Date().getDay();
@@ -23,11 +23,16 @@ export default function LocationSection() {
   return (
     <section className="py-section">
       <div className="shell">
-        <SectionHeading eyebrow={t('location.eyebrow')} title={t('location.title')} align="left" />
+        <SectionHeading
+          index={index}
+          eyebrow={t('location.eyebrow')}
+          title={t('location.title')}
+          align="left"
+        />
 
-        <div className="mt-14 grid gap-10 lg:grid-cols-2">
-          <Reveal>
-            <div className="aspect-[4/3] w-full overflow-hidden border border-ink/10 bg-cream-deep">
+        <div className="mt-14 grid gap-12 md:mt-20 lg:grid-cols-12 lg:gap-16">
+          <Reveal className="lg:col-span-7">
+            <div className="frame aspect-[4/3] w-full border border-ink/10 lg:aspect-[16/11]">
               <iframe
                 title={`Map to ${BUSINESS.name}`}
                 src={`https://www.google.com/maps?q=${MAPS_QUERY}&output=embed`}
@@ -39,40 +44,50 @@ export default function LocationSection() {
             </div>
           </Reveal>
 
-          <Reveal delay={0.1} className="flex flex-col justify-center">
-            <address className="not-italic">
-              <p className="font-display text-[1.5rem] text-ink">{BUSINESS.address.street}</p>
-              <p className="mt-1 text-ink-muted">
-                {BUSINESS.address.city}, {BUSINESS.address.state} {BUSINESS.address.zip}
+          <div className="lg:col-span-5">
+            <Reveal>
+              <address className="not-italic">
+                <p className="text-display-sm text-ink">{BUSINESS.address.street}</p>
+                <p className="mt-1.5 text-ink-muted">
+                  {BUSINESS.address.city}, {BUSINESS.address.state} {BUSINESS.address.zip}
+                </p>
+              </address>
+              <p className="mt-5 max-w-prose text-sm leading-relaxed text-ink-muted">
+                {t('location.parking')}
               </p>
-            </address>
+            </Reveal>
 
-            <p className="mt-4 text-sm text-ink-muted">{t('location.parking')}</p>
+            <Reveal delay={0.12} className="mt-10">
+              <h3 className="font-body text-label font-medium uppercase text-ink">
+                {t('location.hours')}
+              </h3>
+              <dl className="mt-5 border-t border-ink/10">
+                {DAY_ORDER.map((day) => {
+                  const h = HOURS.find((x) => x.day === day)!;
+                  const isToday = day === today;
+                  return (
+                    <div
+                      key={day}
+                      className={`flex justify-between gap-6 border-b border-ink/10 py-3 text-sm ${
+                        isToday ? 'font-medium text-ink' : 'text-ink-muted'
+                      }`}
+                    >
+                      <dt className="flex items-center gap-2.5">
+                        {isToday && (
+                          <span aria-hidden="true" className="h-1 w-1 rounded-full bg-gold" />
+                        )}
+                        {DAY_LABEL[day][lang]}
+                      </dt>
+                      <dd className={h.open ? 'tabular-nums' : 'text-rose-text'}>
+                        {h.open ? `${fmt(h.open, lang)} – ${fmt(h.close!, lang)}` : t('location.closed')}
+                      </dd>
+                    </div>
+                  );
+                })}
+              </dl>
+            </Reveal>
 
-            <h3 className="mt-9 text-[0.7rem] font-semibold uppercase tracking-[0.2em] text-ink">
-              {t('location.hours')}
-            </h3>
-            <dl className="mt-4 max-w-sm divide-y divide-ink/10 border-y border-ink/10">
-              {DAY_ORDER.map((day) => {
-                const h = HOURS.find((x) => x.day === day)!;
-                const isToday = day === today;
-                return (
-                  <div
-                    key={day}
-                    className={`flex justify-between gap-6 py-2.5 text-sm ${
-                      isToday ? 'font-semibold text-ink' : 'text-ink-muted'
-                    }`}
-                  >
-                    <dt>{DAY_LABEL[day][lang]}</dt>
-                    <dd className={h.open ? '' : 'text-rose-text'}>
-                      {h.open ? `${fmt(h.open, lang)} – ${fmt(h.close!, lang)}` : t('location.closed')}
-                    </dd>
-                  </div>
-                );
-              })}
-            </dl>
-
-            <div className="mt-8 flex flex-wrap gap-3">
+            <Reveal delay={0.2} className="mt-9 flex flex-wrap gap-3">
               <a href={`tel:${BUSINESS.phoneHref}`} className="btn-primary">
                 {t('location.callUs')}
               </a>
@@ -84,8 +99,8 @@ export default function LocationSection() {
               >
                 {t('location.directions')}
               </a>
-            </div>
-          </Reveal>
+            </Reveal>
+          </div>
         </div>
       </div>
     </section>

@@ -5,13 +5,15 @@ Marketing site and appointment-booking interface for Lupita's Beauty Salon,
 
 Next.js 16 (App Router) · React 19 · TypeScript · Tailwind CSS · Framer Motion.
 
+**📋 [Security & Best Practices](./SECURITY.md)** — Read before deploying to production
+
 ---
 
 ## What is real and what is not
 
 Read this section before showing the site to anyone.
 
-**Working today, no accounts required**
+**Working today, no accounts required** (except admin)
 
 - Every page: home, services, gallery, about, booking, owner dashboard, 404
 - Full five-step booking flow with real availability logic — opening hours,
@@ -20,28 +22,33 @@ Read this section before showing the site to anyone.
   that remembers the choice and auto-detects Spanish browsers
 - Local SEO: metadata, `HairSalon` structured data, sitemap, robots
 - Google Maps embed, click-to-call, directions
-- Owner dashboard: view/approve/cancel appointments, block time off
+- Owner dashboard: login-protected, view/approve/cancel appointments, block time off
+- **Stripe payment processing** — collect deposits or full payment at booking
+  (optional, configurable via environment variables)
+- **Admin authentication** — `/admin` requires email + password login (via Supabase)
+- **Security hardened**:
+  - 30-minute inactivity timeout
+  - Rate limiting (prevent brute force)
+  - Security headers (HSTS, CSP, X-Frame-Options, etc.)
+  - Audit logging (login, appointments, changes)
+  - Input validation & XSS protection
 
 **Not real yet — needs an account and keys**
 
 | Feature | What it needs |
 |---|---|
+| Payment processing | Stripe account (free to set up, pay per transaction) |
 | Appointments surviving a browser refresh on another device | A database (Supabase, Neon, Planetscale) |
 | Confirmation email | Resend or SendGrid |
 | Confirmation text message | Twilio |
 | 24-hour reminders, thank-you follow-ups | A scheduled job (Vercel Cron) + the above |
 | Newsletter signup actually storing an address | An email provider |
-| A secure owner dashboard | Real authentication |
 
 Appointments currently save to `localStorage` — that is, to one browser on one
 device. Two customers booking from two phones cannot see each other's slots.
 **This is a demo of the booking experience, not a booking system yet.** The
 confirmation screen says so to the customer, and the dashboard says so to the
 owner. Do not remove those notices until the backend is connected.
-
-`/admin` has **no password**. It is `noindex`ed and excluded in `robots.txt`,
-but that hides it from search engines, not from people. Put it behind real
-authentication before the site goes live.
 
 ---
 
@@ -55,6 +62,97 @@ npm start        # serve the production build
 ```
 
 Node 20 or newer.
+
+---
+
+## Stripe Payment Integration (Optional)
+
+To enable payment processing:
+
+1. Create a free [Stripe account](https://stripe.com)
+2. Copy `.env.local.example` to `.env.local`
+3. Add your Stripe API keys from the [Stripe Dashboard](https://dashboard.stripe.com/apikeys):
+   - `NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY` (public key, safe to commit)
+   - `STRIPE_SECRET_KEY` (secret key, never commit)
+4. Set payment configuration:
+   - `NEXT_PUBLIC_PAYMENTS_ENABLED=true` to enable payments
+   - `NEXT_PUBLIC_DEPOSIT_CENTS=5000` to collect a $50 deposit (or set to 0 for full payment)
+
+Payments are **optional** — leave `NEXT_PUBLIC_PAYMENTS_ENABLED=false` to book without payment.
+
+When payments are enabled:
+- Customers fill in their details, then see a secure Stripe payment form
+- Deposits are collected at booking time
+- Payment data is encrypted and handled by Stripe (never stored locally)
+- Failing to process a test payment? Stripe test mode accepts `4242 4242 4242 4242` with any future expiry and any CVC
+
+---
+
+## Admin Dashboard Authentication (Recommended)
+
+Protect the owner dashboard with a login:
+
+1. Create a free [Supabase account](https://supabase.com)
+2. Copy `.env.local.example` to `.env.local`
+3. Add your Supabase keys from the [Supabase Dashboard](https://app.supabase.com):
+   - `NEXT_PUBLIC_SUPABASE_URL` — your project URL
+   - `NEXT_PUBLIC_SUPABASE_ANON_KEY` — your anon key
+4. Create an owner account in Supabase:
+   - Go to **Authentication** → **Users**
+   - Click **Add user**
+   - Enter owner email + password
+5. Test: Visit `/admin/login` and sign in with those credentials
+
+**After enabling authentication:**
+- `/admin` now requires login
+- Owner signs in at `/admin/login`
+- Session expires after inactivity
+- Sign out button available in dashboard header
+- Test account: use any email + password you set in Supabase
+
+**What's still demo mode:**
+- Appointments still save to browser `localStorage`
+- Two devices cannot see each other's bookings
+- When you connect a database (next step), appointments will be real
+
+---
+
+## The design system — "Editorial Atelier"
+
+Read this before adding a section, or the page drifts back toward a template.
+
+**Sections are a numbered sequence, not a stack.** `SectionHeading` takes an
+`index` (`"01"`, `"02"`…) that renders as a serial numeral beside the eyebrow.
+Continue the numbering when you add a section; the numerals are what make the
+page read as composed rather than assembled.
+
+**Vary the composition.** The homepage alternates deliberately: asymmetric
+12-column split → full-width index → two-up → dark band. Seven consecutive
+centred-heading-over-a-grid sections is the single strongest "AI template"
+signal a page can have, however good each section is on its own. `align`
+defaults to `left` for that reason.
+
+**Gold is punctuation.** It appears on hairlines, serial numerals, the stops in
+the hero statement, and on dark ground. It is never a panel border, never a
+background, and never body text on cream (it fails contrast — see
+Accessibility). If gold shows up three times in one section, remove two.
+
+**Services are an index, not cards.** `ServiceIndex` sets the menu the way a
+tasting menu is set — numbered rows, hairline rules, the whole row as the hit
+target. `ServiceCard` was deleted; do not reintroduce a bordered card grid.
+
+**Type scale is deliberately gapped.** Use the `display-xl / lg / md / sm`
+tokens rather than ad-hoc `text-[clamp(...)]`. Mid-sized headings everywhere is
+what makes a page look filled in rather than art-directed. Playfair carries
+every heading at weight 400 — do not bold it.
+
+**Motion has one signature.** Content lifts (`<Reveal>`), headings unmask
+(`variant="mask"`), rules draw (`variant="rule"`). Three variants, one easing
+curve (`ease-luxe`). Do not add a fourth.
+
+**Buttons have three weights.** `.btn-primary` (fill), `.btn-outline`
+(hairline), `.btn-quiet` (bare text with a rule that draws on hover), plus
+`-ondark` variants. Hierarchy comes from weight, not from new shapes.
 
 ---
 
@@ -212,35 +310,55 @@ part of the salon entity instead.
 
 Checked, not assumed:
 
-- Brand palette measured against WCAG. Champagne gold `#D4AF37` is **1.95:1 on
-  cream** — it fails badly as text on light backgrounds, so it is used only for
-  rules, borders and gold-on-black. Text needing gold uses `#7A5F18` (5.61:1).
-  The same applies to soft rose: `#D8A7A7` decoratively, `#8C5252` (5.66:1) for
-  text. **Do not set body text in `#D4AF37` on cream.**
-- Body text 6.15:1, headings 17.5:1.
+- Brand palette measured against WCAG. Brass `#C9A227` is **2.26:1 on cream** —
+  it fails as text on light grounds, so it is used only for rules, borders,
+  numerals and gold-on-black. Text needing gold uses `#7A5F18` (5.61:1). The
+  same applies to soft rose: `#D8A7A7` decoratively, `#8C5252` (5.66:1) for
+  text. **Do not set body text in `#C9A227` on cream.**
+- The lightest text tone, `ink.faint` `#6F6859`, measures 5.17:1 on cream and
+  4.66:1 on cream-deep — it carries small meta text (durations, prices,
+  captions) so it has to clear AA on both grounds. An earlier, prettier
+  `#948C81` measured 3.10:1 and was rejected.
+- Body text 6.17:1, headings 18.2:1.
 - Every interactive target is at least 44×44px.
 - Visible focus rings everywhere; none are removed.
-- `prefers-reduced-motion` disables all scroll animations and smooth scrolling.
+- `prefers-reduced-motion` forces every reveal to its resting state rather than
+  merely shortening it — reveals start at `opacity: 0`, so "faster" would still
+  mean invisible.
+- A `<noscript>` block restores that same resting state, so the page is fully
+  readable with JavaScript disabled.
+- The mobile drawer is a labelled `role="dialog"`, locks body scroll, closes on
+  Escape, and takes its links out of the tab order while hidden.
 - Form errors sit beside their field, are announced via `aria-describedby`, and
   mark the input `aria-invalid`.
 - Language switching updates `<html lang>` so screen readers change voice.
 
-Verified end-to-end in Chromium: all pages render, the booking flow completes,
-validation catches every empty field, the booking appears in the dashboard,
-and the console is clean — no JS errors, no failed requests.
+Verified in Chromium at 390 / 834 / 1440 / 1920 px: no horizontal overflow on
+any page, no reveal left stuck at zero opacity, drawer and booking flow both
+complete, and the console is clean — no JS errors, no failed requests.
 
 ## Performance
 
 - Every page prerenders as static HTML.
-- Fonts self-hosted through `next/font` — no render-blocking Google Fonts.
+- **Five font weights, down from nine.** Playfair Display 400/500 and Jost
+  300/400/500, self-hosted through `next/font`.
+- **No animation library.** Scroll reveals are CSS transitions toggled by a
+  single shared `IntersectionObserver` (`components/Reveal.tsx`), replacing
+  framer-motion — roughly 50 kB gzipped removed from every page for motion
+  that CSS does natively.
+- **Stripe.js is never fetched unless payments are configured.** The import
+  uses `@stripe/stripe-js/pure`; the plain entrypoint injects the js.stripe.com
+  script as a module side-effect, so importing it at all would cost every
+  booking-page visitor a third-party request.
 - The hero video is gated behind `HERO_VIDEO` in `lib/business.ts`: while those
   paths are empty no video element mounts and nothing is requested. When you
   add footage, it loads only after the hero scrolls into view and is skipped
   entirely on Save-Data or 2G/3G connections.
 - Animations move `transform` and `opacity` only, never `width`/`height`, so
   they cannot cause layout shift.
-- Image placeholders reserve their aspect ratio, so dropping in real photos
-  will not move the page.
+- Photographs go through `next/image` with explicit `sizes`, and every
+  placeholder reserves its aspect ratio, so dropping in real photos will not
+  move the page.
 
 Compress hero footage hard — under 3 MB, ideally WebM plus MP4 — and export
 photographs as WebP. That is where the 3-second budget will be won or lost.

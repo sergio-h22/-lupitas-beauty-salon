@@ -20,6 +20,14 @@ const DICT = {
     cta2: { en: 'View Services', es: 'Ver Servicios' },
     scroll: { en: 'Scroll', es: 'Desliza' },
   },
+  /** Short-form versions of facts already stated elsewhere on the page, cut
+   *  down to fit the trust band that sits directly beneath the hero. */
+  trust: {
+    seHabla: { en: 'Se habla español', es: 'Se habla español' },
+    parking: { en: 'Free parking on site', es: 'Estacionamiento gratuito' },
+    disney: { en: 'Five minutes from Disneyland', es: 'A cinco minutos de Disneyland' },
+    quickBook: { en: 'Book online in a minute', es: 'Reserva en línea en un minuto' },
+  },
   welcome: {
     eyebrow: { en: 'Welcome', es: 'Bienvenida' },
     title: { en: 'Personalized hair care in the heart of Anaheim', es: 'Cuidado capilar personalizado en el corazón de Anaheim' },

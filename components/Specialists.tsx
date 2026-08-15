@@ -7,28 +7,38 @@ import SectionHeading from './SectionHeading';
 import Reveal from './Reveal';
 import PhotoPlaceholder from './PhotoPlaceholder';
 
-export default function Specialists() {
+export default function Specialists({ index }: { index?: string }) {
   const L = useLocalized();
   const t = useT();
 
   return (
     <section className="py-section">
       <div className="shell">
-        <SectionHeading eyebrow={t('team.eyebrow')} title={t('team.title')} />
+        <SectionHeading index={index} eyebrow={t('team.eyebrow')} title={t('team.title')} align="left" />
 
-        <ul className="mt-16 grid gap-10 sm:grid-cols-2 lg:grid-cols-3">
+        <ul className="mt-14 grid gap-x-8 gap-y-14 md:mt-20 sm:grid-cols-2 lg:grid-cols-3">
           {SPECIALISTS.map((s, i) => (
-            <Reveal as="li" key={s.id} delay={i * 0.08}>
-              <PhotoPlaceholder label={s.name} src={s.photo || undefined} />
-              <h3 className="mt-6 font-display text-[1.35rem]">{s.name}</h3>
-              <p className="mt-1 text-[0.7rem] font-semibold uppercase tracking-[0.18em] text-gold-text">
+            <Reveal as="li" key={s.id} delay={i * 0.08} className="group">
+              <PhotoPlaceholder
+                label={s.name}
+                src={s.photo || undefined}
+                ratio="aspect-[4/5]"
+                sizes="(min-width: 1024px) 30vw, (min-width: 640px) 45vw, 90vw"
+              />
+
+              <div className="mt-6 flex items-baseline justify-between gap-4 border-t border-ink/10 pt-5">
+                <h3 className="text-display-sm">{s.name}</h3>
+                <span className="serial" aria-hidden="true">
+                  {String(i + 1).padStart(2, '0')}
+                </span>
+              </div>
+
+              <p className="mt-2 font-body text-label font-medium uppercase text-gold-text">
                 {L(s.role)}
               </p>
-              <p className="mt-4 text-sm leading-relaxed text-ink-muted">{L(s.bio)}</p>
-              <Link
-                href={`/book?specialist=${s.id}`}
-                className="mt-5 inline-flex min-h-[44px] items-center text-[0.75rem] font-semibold uppercase tracking-[0.14em] text-ink underline decoration-gold decoration-2 underline-offset-[6px] hover:text-gold-text"
-              >
+              <p className="mt-4 max-w-prose text-sm leading-relaxed text-ink-muted">{L(s.bio)}</p>
+
+              <Link href={`/book?specialist=${s.id}`} className="btn-quiet mt-5">
                 {t('team.bookWith')} {s.name}
               </Link>
             </Reveal>

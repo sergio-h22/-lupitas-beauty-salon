@@ -5,32 +5,41 @@ import { useT } from '@/lib/i18n';
 import { BUSINESS } from '@/lib/business';
 import Reveal from './Reveal';
 
+/**
+ * The closer. Set at the largest display size on the page — larger than any
+ * section heading — so the last thing a visitor reads is also the loudest.
+ */
 export default function BookingCTA() {
   const t = useT();
 
   return (
-    <section className="relative overflow-hidden bg-ink py-section">
+    <section className="relative overflow-hidden bg-ink py-section-lg">
       <div
         aria-hidden="true"
-        className="absolute inset-0 bg-[radial-gradient(90%_70%_at_50%_0%,rgba(212,175,55,0.16)_0%,transparent_70%)]"
+        className="absolute inset-0 bg-[radial-gradient(85%_65%_at_50%_0%,rgba(201,162,39,0.14)_0%,transparent_68%)]"
       />
-      <div className="shell relative text-center">
-        <Reveal>
-          <div className="rule-gold mx-auto" />
-          <h2 className="mt-6 text-[clamp(2rem,5vw,3.4rem)] !text-cream">{t('cta.title')}</h2>
-          <p className="mx-auto mt-5 max-w-xl text-cream/70">{t('cta.body')}</p>
-          <div className="mt-10 flex flex-wrap justify-center gap-4">
+
+      <div className="shell relative">
+        <div className="max-w-4xl">
+          <Reveal variant="rule" className="h-px w-16 bg-gold" />
+
+          <Reveal as="h2" variant="mask" delay={0.08} className="mt-8 text-display-lg !text-cream">
+            <span>{t('cta.title')}</span>
+          </Reveal>
+
+          <Reveal delay={0.18} className="mt-7 max-w-prose text-[1.02rem] leading-relaxed text-cream/60">
+            {t('cta.body')}
+          </Reveal>
+
+          <Reveal delay={0.26} className="mt-11 flex flex-wrap items-center gap-4">
             <Link href="/book" className="btn-ondark">
               {t('hero.cta1')}
             </Link>
-            <a
-              href={`tel:${BUSINESS.phoneHref}`}
-              className="btn border border-cream/35 text-cream hover:border-cream hover:bg-cream hover:text-ink"
-            >
+            <a href={`tel:${BUSINESS.phoneHref}`} className="btn-ondark-outline">
               {BUSINESS.phone}
             </a>
-          </div>
-        </Reveal>
+          </Reveal>
+        </div>
       </div>
     </section>
   );

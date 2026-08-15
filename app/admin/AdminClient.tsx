@@ -1,9 +1,12 @@
 'use client';
 
 import { useEffect, useMemo, useState } from 'react';
+import { useRouter } from 'next/navigation';
 import { useLang, useLocalized } from '@/lib/i18n';
 import { serviceById } from '@/lib/services';
 import { SPECIALISTS } from '@/lib/specialists';
+import { signOut, getCurrentUser } from '@/lib/supabase';
+import { addAuditLog } from '@/lib/audit-log';
 import {
   Appointment,
   loadAppointments,
@@ -19,6 +22,7 @@ import {
 type Filter = 'upcoming' | 'all' | 'pending' | 'cancelled';
 
 export default function AdminClient() {
+  const router = useRouter();
   const { lang } = useLang();
   const L = useLocalized();
   const [appts, setAppts] = useState<Appointment[]>([]);
@@ -26,10 +30,39 @@ export default function AdminClient() {
   const [filter, setFilter] = useState<Filter>('upcoming');
   const [blockDate, setBlockDate] = useState('');
   const [blockTime, setBlockTime] = useState('10:00');
+  const [loggingOut, setLoggingOut] = useState(false);
+
+  const [userEmail, setUserEmail] = useState('');
+
+  async function handleLogout() {
+    setLoggingOut(true);
+    try {
+      addAuditLog('LOGOUT', userEmail, true);
+      await signOut();
+      router.push('/admin/login');
+    } catch (error) {
+      console.error('Logout failed:', error);
+      setLoggingOut(false);
+    }
+  }
 
   useEffect(() => {
     setAppts(loadAppointments());
     setBlocked(loadBlocked());
+
+    // Get current user email for audit logging
+    async function getUser() {
+      try {
+        const user = await getCurrentUser();
+        if (user?.email) {
+          setUserEmail(user.email);
+        }
+      } catch (err) {
+        console.error('Failed to get user:', err);
+      }
+    }
+
+    getUser();
   }, []);
 
   const todayKey = formatDateKey(new Date());
@@ -53,7 +86,16 @@ export default function AdminClient() {
   }, [appts, todayKey]);
 
   function setStatus(id: string, status: Appointment['status']) {
+    const appt = appts.find((a) => a.id === id);
     setAppts(updateAppointment(id, { status }));
+
+    // Log the action
+    const action = status === 'approved' ? 'APPOINTMENT_APPROVED' : 'APPOINTMENT_CANCELLED';
+    addAuditLog(action as any, userEmail, true, {
+      appointmentId: id,
+      customerName: appt?.name,
+      newStatus: status,
+    });
   }
 
   function addBlock() {
@@ -63,25 +105,42 @@ export default function AdminClient() {
     const next = [...blocked, key];
     setBlocked(next);
     saveBlocked(next);
+
+    addAuditLog('TIME_BLOCKED', userEmail, true, {
+      date: blockDate,
+      time: blockTime,
+    });
   }
 
   function removeBlock(key: string) {
     const next = blocked.filter((k) => k !== key);
     setBlocked(next);
     saveBlocked(next);
+
+    addAuditLog('TIME_UNBLOCKED', userEmail, true, {
+      blockedSlot: key,
+    });
   }
 
   return (
     <div className="shell py-16">
-      <div className="border border-rose-text/40 bg-rose/10 p-5">
-        <p className="text-sm font-semibold text-ink">Demo dashboard — not a secure admin area.</p>
-        <p className="mt-1 text-sm text-ink-muted">
-          This page reads appointments from this browser&rsquo;s local storage. It has no authentication and no
-          server. Before real use, move appointments to a database and put this behind proper login.
-        </p>
+      <div className="mb-8 flex items-center justify-between">
+        <h1 className="text-[clamp(1.8rem,4vw,2.6rem)]">Appointments</h1>
+        <button
+          type="button"
+          onClick={handleLogout}
+          disabled={loggingOut}
+          className="btn-outline disabled:cursor-not-allowed disabled:opacity-35"
+        >
+          {loggingOut ? 'Signing out...' : 'Sign Out'}
+        </button>
       </div>
 
-      <h1 className="mt-10 text-[clamp(1.8rem,4vw,2.6rem)]">Appointments</h1>
+      <div className="border border-ink/15 bg-cream-deep p-5">
+        <p className="text-sm text-ink-muted">
+          Appointments are saved to browser local storage. Before launching, connect to a real database so bookings persist across devices and browsers.
+        </p>
+      </div>
 
       <dl className="mt-8 grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
         <Stat label="Upcoming" value={String(stats.upcoming)} />
