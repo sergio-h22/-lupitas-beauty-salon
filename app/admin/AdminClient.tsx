@@ -2,6 +2,7 @@
 
 import { useEffect, useMemo, useState } from 'react';
 import { useRouter } from 'next/navigation';
+import Link from 'next/link';
 import { useLang, useLocalized } from '@/lib/i18n';
 import { serviceById } from '@/lib/services';
 import { SPECIALISTS } from '@/lib/specialists';
@@ -134,6 +135,15 @@ export default function AdminClient() {
         >
           {loggingOut ? 'Signing out...' : 'Sign Out'}
         </button>
+      </div>
+
+      <div className="mb-8 flex flex-wrap gap-2">
+        <Link href="/admin" className="btn-quiet text-sm">
+          Overview
+        </Link>
+        <Link href="/admin/connect-account" className="btn-quiet text-sm">
+          Payment Settings
+        </Link>
       </div>
 
       <div className="border border-ink/15 bg-cream-deep p-5">

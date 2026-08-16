@@ -29,7 +29,7 @@ export async function POST(req: NextRequest) {
   }
 
   try {
-    const { amount, description, email, name } = await req.json();
+    const { amount, description, email, name, connectedAccountId } = await req.json();
 
     // The client is not trusted to set the price. Bound the amount here so a
     // tampered request cannot create a $0.01 — or $10,000 — payment intent.
@@ -37,13 +37,23 @@ export async function POST(req: NextRequest) {
       return NextResponse.json({ error: 'Invalid amount' }, { status: 400 });
     }
 
-    const intent = await stripe.paymentIntents.create({
+    const paymentIntentParams: Stripe.PaymentIntentCreateParams = {
       amount,
       currency: 'usd',
       description: typeof description === 'string' ? description.slice(0, 350) : undefined,
       receipt_email: typeof email === 'string' && email.includes('@') ? email : undefined,
       metadata: { customer_name: typeof name === 'string' ? name.slice(0, 120) : '' },
-    });
+    };
+
+    // If a connected account is provided, charge on their behalf and collect
+    // the platform fee (0.25% + $0.25 per transaction).
+    if (typeof connectedAccountId === 'string' && connectedAccountId.startsWith('acct_')) {
+      paymentIntentParams.on_behalf_of = connectedAccountId;
+      // Platform fee: 0.25% of amount + $0.25 = (amount * 0.0025) + 25 cents
+      paymentIntentParams.application_fee_amount = Math.round(amount * 0.0025) + 25;
+    }
+
+    const intent = await stripe.paymentIntents.create(paymentIntentParams);
 
     return NextResponse.json({ clientSecret: intent.client_secret });
   } catch (error) {
